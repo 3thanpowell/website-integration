@@ -1,7 +1,7 @@
 
 <!-- navbar - __DIR__ include in every page -->
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
 
   <!-- logo -->
   <a class="navbar-brand" href="index.php">
