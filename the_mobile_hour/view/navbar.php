@@ -1,11 +1,11 @@
 
-<!-- navbar - __DIR__ include in every page -->
+<!-- navbar  -->
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
 
   <!-- logo -->
-  <a class="navbar-brand" href="index.php">
-    <img src="images/logo.png" width="220" height="50" alt="The Mobile Hour Logo">
+  <a class="navbar-brand" href="../index.php">
+    <img src="../images/logo.png" width="220" height="50" alt="The Mobile Hour Logo">
   </a>
   
   <!-- hamburger toggler -->
@@ -41,7 +41,7 @@
 
       <!-- myacc -->
       <li class="nav-item ml-2">
-        <a class="nav-link" href="view/login.php">
+        <a class="nav-link" href="login.php">
 
         <!-- myacc svg - person (fill) -->
         <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">

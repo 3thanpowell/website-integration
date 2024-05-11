@@ -2,8 +2,6 @@
 <html lang="en">
 <head>
 
-  
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -13,16 +11,85 @@
 
   <title>The Mobile Hour</title>
 
+  <style>
+
+    @media (max-width: 470px) {
+    .carousel-item img {
+    height: 300px;
+    width:100vw;
+    object-fit: contain;
+  
+    }
+    }
+  </style>
+
 </head>
 
+
+
 <body>
-  <!-- navbar -->
-  <?php include 'view/navbar.php'; ?>
 
   <header>
+    <!-- home nav -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+
+      <!-- logo -->
+      <a class="navbar-brand" href="index.php">
+        <img src="images/logo.png" width="220" height="50" alt="The Mobile Hour Logo">
+      </a>
+
+      <!-- hamburger toggler -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target= "#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- navbar links -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="view/products.php">Products</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="view/brands.php">Brands</a>
+          </li>
+        </ul>
+
+        <!-- navbar left margin items -->
+        <ul class="navbar-nav ml-auto">
+
+            <!-- search bar -->
+          <form class="d-flex" role="search">
+            <input class="form-control" type="search" placeholder="Search" aria-label="Search" style= "font-size: 15px">
+            <button class="btn btn-outline-white" type="submit">
+              <!-- search svg - magn glass-->
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search mb-2" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+              </svg>
+            </button>
+          </form>
+        
+
+          <!-- myacc -->
+          <li class="nav-item ml-2">
+            <a class="nav-link" href="view/login.php">
+
+            <!-- myacc svg - person (fill) -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+            </svg> 
+          
+            My Account 
+            </a>
+          </li>
+
+        <ul>
+
+      <div>
+        
+    </nav>
 
     <!-- carousel -->
-    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+    <div id="carouselExampleIndicators" class="carousel slide mt-5" data-ride="carousel">
       <ol class="carousel-indicators">
         <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
         <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
@@ -44,7 +111,7 @@
           </a>
         </div>
 
-        <div class="carousel-item placeholder">
+        <div class="carousel-item">
           <img class="d-block w-100" src="images/kode_slide.png" alt="">
         </div>
       </div>
@@ -125,39 +192,45 @@
     </section>
 
     <!-- title - mobile phones -->
-    <div class="container d-flex p-3">
+    <div class="container  p-3 ">
+      <div class="row  d-flex">
+        <div class="col-auto">
+          <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-phone" viewBox="0 0 16 16">
+          <path d="M11 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM5 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+            <path d="M8 14a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+          </svg>
+        </div>
 
-      <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" fill="currentColor" class="bi bi-phone" viewBox="0 0 16 16">
-       <path d="M11 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM5 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
-        <path d="M8 14a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
-      </svg>
+        <div class="col-8">
+          <h1 class="display-5">Mobile Phones</h1>
+        </div>
 
-      <h1 class="display-4"> Mobile Phones </h1>
+      </div>
+
+
 
     </div>
 
     <!-- brand showcase -->
-    <div class="container">
+    <div class="container p-3">
       <div class="row"> 
-        <div class="col-lg-8 col-sm-12">
+        <div class="col-lg-8 col-md-12 col-sm-12">
           
-          <img class="img"src="images/display_brand_shishu.png" alt="" width="100%" height="97.8%">
+          <img class="img"src="images/display_brand_shishu.png" alt="" width="100%" height="100%">
          
         </div>
 
-        <div class="col-lg-4 col-sm-12">
+        <div class="col-lg-4 col-md-12 col-sm-12 pt-md-3 pt-lg-0 pt-sm-3">
           <div class="row">
-            <div class="col-lg-12 col-sm-6">
+            <div class="col-lg-12 col-sm-6 col-md-6 mb-lg-5 mb-md-3">
 
-              <img class="img-fluid"src="images/display_brand_shishu.png" alt="" width="100%" height="100%">
+              <img class="img-fluid"src="images/display_brand_kode.png" alt="" width="100%" height="100%">
 
             </div>
 
-            <div class="col-lg-12 col-sm-6 m-2"></div>
 
-
-            <div class="col-lg-12 col-sm-6">
-              <img class="img-fluid" src="images/display_brand_shishu.png" alt="" width="100%" height="100%">
+            <div class="col-lg-12 col-sm-6 col-md-6">
+              <img class="img-fluid" src="images/display_brand_panda.png" alt="" width="100%" height="100%">
             </div> 
 
           </div>
@@ -165,24 +238,24 @@
       </div>
     </div>
 
-    <!-- Products -->
+    <!-- product line 1 -->
     <div class="container">
-      <div class="row">
+      <div class="row justify-content-center">
 
-        <!-- Product -->
-        <div class="col-lg-3 col-m-6 col-sm-12">
-          <div class="card">
+        <!-- product -->
+        <div class="col-lg-3 col-md-5 col-sm-5 col-5 pt-2 ">
+          <div class="card bg-light">
             <img class="card-img-top" src="images/placeholder.jpg" alt="Card image cap">
             <div class="card-body">
               <h5 class="card-title">Product Name</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            
               <div class="row d-flex">
-                <div class="col-6 align">
+                <div class="col-12">
                   <p class="pt-2"><strong>$19.99</strong></p>
                 </div>
                 
-                <div class="col">
-                  <a href="#" class="btn btn-success">Order Now</a>
+                <div class="col-12">
+                  <a href="#" class="btn btn-info">Order Now</a>
                 </div>
               </div>
               
@@ -190,20 +263,20 @@
           </div>
         </div>
 
-        <!-- Product -->
-        <div class="col-lg-3 col-m-6 col-sm-12">
-          <div class="card">
+        <!-- product -->
+        <div class="col-lg-3 col-md-5 col-sm-5 col-5 pt-2">
+          <div class="card bg-light">
             <img class="card-img-top" src="images/placeholder.jpg" alt="Card image cap">
             <div class="card-body">
               <h5 class="card-title">Product Name</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            
               <div class="row d-flex">
-                <div class="col-6 align">
+                <div class="col-12">
                   <p class="pt-2"><strong>$19.99</strong></p>
                 </div>
                 
-                <div class="col">
-                  <a href="#" class="btn btn-success">Order Now</a>
+                <div class="col-12">
+                  <a href="#" class="btn btn-info">Order Now</a>
                 </div>
               </div>
               
@@ -211,20 +284,20 @@
           </div>
         </div>
 
-        <!-- Product -->
-        <div class="col-lg-3 col-m-6 col-sm-12">
-          <div class="card">
+        <!-- product -->
+        <div class="col-lg-3 col-md-5 col-sm-5 col-5 pt-2">
+          <div class="card bg-light">
             <img class="card-img-top" src="images/placeholder.jpg" alt="Card image cap">
             <div class="card-body">
               <h5 class="card-title">Product Name</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            
               <div class="row d-flex">
-                <div class="col-6 align">
+                <div class="col-12">
                   <p class="pt-2"><strong>$19.99</strong></p>
                 </div>
                 
-                <div class="col">
-                  <a href="#" class="btn btn-success">Order Now</a>
+                <div class="col-12">
+                  <a href="#" class="btn btn-info">Order Now</a>
                 </div>
               </div>
               
@@ -232,28 +305,124 @@
           </div>
         </div>
 
-        <!-- Product -->
-        <div class="col-lg-3 col-m-6 col-sm-12">
-          <div class="card">
+        <!-- product -->
+        <div class="col-lg-3 col-md-5 col-sm-5 col-5 pt-2">
+          <div class="card bg-light">
             <img class="card-img-top" src="images/placeholder.jpg" alt="Card image cap">
             <div class="card-body">
               <h5 class="card-title">Product Name</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            
               <div class="row d-flex">
-                <div class="col-6 align">
+                <div class="col-12">
                   <p class="pt-2"><strong>$19.99</strong></p>
                 </div>
                 
-                <div class="col">
-                  <a href="#" class="btn btn-success">Order Now</a>
+                <div class="col-12">
+                  <a href="#" class="btn btn-info">Order Now</a>
                 </div>
               </div>
               
             </div>
           </div>
         </div>
+      </div>
 
     </div>
+
+    <!-- product line 2 -->
+    <div class="container">
+      <div class="row justify-content-center pt-3">
+
+        <!-- product -->
+        <div class="col-lg-3 col-md-5 col-sm-5 col-5 pt-2">
+          <div class="card bg-light">
+            <img class="card-img-top" src="images/placeholder.jpg" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title">Product Name</h5>
+            
+              <div class="row d-flex">
+                <div class="col-12">
+                  <p class="pt-2"><strong>$19.99</strong></p>
+                </div>
+                
+                <div class="col-12">
+                  <a href="#" class="btn btn-info">Order Now</a>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+
+        <!-- product -->
+        <div class="col-lg-3 col-md-5 col-sm-5 col-5 pt-2">
+          <div class="card bg-light">
+            <img class="card-img-top" src="images/placeholder.jpg" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title">Product Name</h5>
+            
+              <div class="row d-flex">
+                <div class="col-12">
+                  <p class="pt-2"><strong>$19.99</strong></p>
+                </div>
+                
+                <div class="col-12">
+                  <a href="#" class="btn btn-info">Order Now</a>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+
+        <!-- product -->
+        <div class="col-lg-3 col-md-5 col-sm-5 col-5 pt-2">
+          <div class="card bg-light">
+            <img class="card-img-top" src="images/placeholder.jpg" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title">Product Name</h5>
+            
+              <div class="row d-flex">
+                <div class="col-12">
+                  <p class="pt-2"><strong>$19.99</strong></p>
+                </div>
+                
+                <div class="col-12">
+                  <a href="#" class="btn btn-info">Order Now</a>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+
+        <!-- product -->
+        <div class="col-lg-3 col-md-5 col-sm-5 col-5 pt-2">
+          <div class="card bg-light">
+            <img class="card-img-top" src="images/placeholder.jpg" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title">Product Name</h5>
+            
+              <div class="row d-flex">
+                <div class="col-12">
+                  <p class="pt-2"><strong>$199.99</strong></p>
+                </div>
+                
+                <div class="col-12">
+                  <a href="#" class="btn btn-info">Order Now</a>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    
 
 
 
