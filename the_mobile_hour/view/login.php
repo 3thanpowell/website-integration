@@ -16,7 +16,7 @@
 
     <!-- pg title -->
     <div class="container pt-3">
-      <h1 class="display-5">
+      <h1 class="display-5 p-5">
         Login
       </h1>
     </div>
@@ -26,13 +26,39 @@
   <main>
     <div class="container">
       <div class="row">
-        <div class="col-6 border rounded">
-          asdfgeafgasfdgasd
+        <div class="col-lg-6 col-sm-12 col-md-12 border rounded bg-light p-5">
+
+          <h3 class="">Registered Customers</h3>
+          <p class="">Sign in using your email</p>  
+
+          <form class="m-4">
+            <div class="form-group">
+              <label for="exampleInputEmail1" class="font-weight-bold">Email address</label>
+              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+              <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1" class="font-weight-bold">Password</label>
+              <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+            </div>
+
+            <button type="submit" class="btn btn-lg btn-dark">Sign in</button>
+          </form>
 
         </div>
 
-        <div class="col-6 border rounded">
-          asdgasdgasg
+        <div class="col-lg-6 col-sm-12 col-md-12 border rounded bg-light p-5">
+
+          <h3 class="">New Customers</h3>
+          <p class="">Save your address and keep track of your orders by creating an account.</p> 
+
+          <button type="button" class="btn btn-info btn-lg m-3">
+            <a href="signup.php" class="text-white" style="text-decoration: none; !important">Register</a>
+          </button>
+
+
+
+
           </div>
       </div>
     </div>
