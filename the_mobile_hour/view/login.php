@@ -14,7 +14,7 @@
     <!-- nav -->
     <?php include 'navbar.php'; ?>
 
-    <!-- pg title -->
+    <!-- page title -->
     <div class="container pt-3">
       <h1 class="display-5 p-5">
         Login
@@ -24,6 +24,10 @@
   </header>
 
   <main>
+
+
+
+    <!-- login -->
     <div class="container">
       <div class="row">
         <div class="col-lg-6 col-sm-12 col-md-12 border rounded bg-light p-5">
@@ -47,6 +51,10 @@
 
         </div>
 
+
+
+
+        <!-- sign up -->
         <div class="col-lg-6 col-sm-12 col-md-12 border rounded bg-light p-5">
 
           <h3 class="">New Customers</h3>
@@ -55,14 +63,12 @@
           <button type="button" class="btn btn-info btn-lg m-3">
             <a href="signup.php" class="text-white" style="text-decoration: none; !important">Register</a>
           </button>
-
-
-
-
           </div>
       </div>
     </div>
 
+
+    
   </main>
 
   
