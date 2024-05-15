@@ -8,7 +8,7 @@
             Contact Us
           </h2>
         
-          <ul class="list-unstyled" style="font-size: 18px; !important">
+          <ul class="list-unstyled" style="font-size: 16px; !important">
             <li><span class="font-weight-bold">Address:</span> 123 Address Rd, suburb, QLD, 4123</li>
             <li><span class="font-weight-bold">Email:</span> themobilehour@email.com</li>
             <li><span class="font-weight-bold">Phone:</span> +61 412 345 678</li>
@@ -52,7 +52,7 @@
             Shop 
           </h2>
 
-          <ul class="list-unstyled" style="font-size: 18px; !important">
+          <ul class="list-unstyled" style="font-size: 16px; !important">
             <li> <a href="products.php">Products</a></li>
             <li><a href="brands.php">Brands</a></li>
           </ul>
@@ -65,7 +65,7 @@
             Have An Account?
           </h2>
 
-          <a href="login.php" style="font-size: 18px; !important">Login</a>
+          <a href="login.php" style="font-size: 16px; !important">Login</a>
 
         </div>
       </div>
