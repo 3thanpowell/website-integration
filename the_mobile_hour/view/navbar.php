@@ -1,7 +1,7 @@
 
 <!-- navbar  -->
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
 
   <!-- logo -->
   <a class="navbar-brand" href="../index.php">

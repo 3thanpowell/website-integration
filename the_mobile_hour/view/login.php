@@ -71,6 +71,9 @@
     
   </main>
 
+
+  <!-- footer -->
+  <?php include 'footer.php'; ?>
   
 
   <!-- Bootstrap JS CDN link -->

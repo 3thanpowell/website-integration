@@ -27,7 +27,7 @@
   <main>
   <div class="container">
     <div class="row">
-      <div class="col-12 border rounded bg-light p-5">
+      <div class="col-12 border rounded bg-light p-5 mb-2">
         
         <p class="">Already have an account? <span><a href="login.php">Log in.</a></span></p>
         
@@ -101,7 +101,7 @@
             </div>
           </div>
 
-          <button type="submit" class="btn btn-dark btn-lg">Create an Account</button>
+          <button type="submit" class="btn btn-dark btn-lg">Register</button>
 
         </form>
 
@@ -111,6 +111,8 @@
   </div>
   </main>
 
+  <!-- footer -->
+  <?php include 'footer.php'; ?>
   
 
 
