@@ -35,16 +35,22 @@
           <h3 class="">Registered Customers</h3>
           <p class="">Sign in using your email</p>  
 
-          <form class="m-4">
+          <form class="m-4" action="../controller/login_process.php" method="post">
             <div class="form-group">
-              <label for="exampleInputEmail1" class="font-weight-bold">Email address</label>
-              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+              <label for="email" class="font-weight-bold">Email address</label>
+              <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Enter email" required>
               <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
             </div>
             <div class="form-group">
-              <label for="exampleInputPassword1" class="font-weight-bold">Password</label>
-              <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+              <label for="password" class="font-weight-bold">Password</label>
+              <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
             </div>
+
+            <?php if (isset($_GET['error'])): ?>
+              <div class="alert alert-danger">
+                Invalid email or password.
+              </div>
+            <?php endif; ?>
 
             <button type="submit" class="btn btn-lg btn-dark">Sign in</button>
           </form>
