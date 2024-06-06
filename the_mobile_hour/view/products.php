@@ -66,36 +66,39 @@ $productChunks = array_chunk($products, 4); // Split products into chunks for di
 
   <main>
     <!-- Filter and search form -->
-    <div class="container mb-4">
-      <form method="GET" action="products.php">
-        <div class="row">
-          <div class="col-md-3">
-            <select name="brand" class="form-control">
-              <option value="">All Brands</option>
-              <?php foreach ($brands as $brand): ?>
-                <option value="<?php echo htmlspecialchars($brand); ?>"><?php echo htmlspecialchars($brand); ?></option>
-              <?php endforeach; ?>
-              <!-- Add other brands here -->
-            </select>
-          </div>
-          <div class="col-md-3">
-            <select name="sort" class="form-control">
-              <option value="">Sort By</option>
-              <option value="name_asc">Name A-Z</option>
-              <option value="name_desc">Name Z-A</option>
-              <option value="price_asc">Price Low to High</option>
-              <option value="price_desc">Price High to Low</option>
-            </select>
-          </div>
-          <div class="col-md-3">
-            <input type="text" name="search" class="form-control" placeholder="Search Products">
-          </div>
-          <div class="col-md-3">
-            <button type="submit" class="btn btn-primary">Filter</button>
-          </div>
+  <div class="container mb-4">
+    <form method="GET" action="products.php">
+        <div class="row ml-lg-5">
+            <div class="col-md-3 mt-2">
+                <select name="brand" class="form-control">
+                    <option value="">All Brands</option>
+                    <?php foreach ($brands as $brand): ?>
+                        <option value="<?php echo htmlspecialchars($brand); ?>" <?php echo (isset($_GET['brand']) && $_GET['brand'] === $brand) ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars($brand); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="col-md-3 mt-2">
+                <select name="sort" class="form-control">
+                    <option value="">Sort By</option>
+                    <option value="name_asc" <?php echo (isset($_GET['sort']) && $_GET['sort'] === 'name_asc') ? 'selected' : ''; ?>>Name A-Z</option>
+                    <option value="name_desc" <?php echo (isset($_GET['sort']) && $_GET['sort'] === 'name_desc') ? 'selected' : ''; ?>>Name Z-A</option>
+                    <option value="price_asc" <?php echo (isset($_GET['sort']) && $_GET['sort'] === 'price_asc') ? 'selected' : ''; ?>>Price Low to High</option>
+                    <option value="price_desc" <?php echo (isset($_GET['sort']) && $_GET['sort'] === 'price_desc') ? 'selected' : ''; ?>>Price High to Low</option>
+                </select>
+            </div>
+            <div class="col-md-3 mt-2">
+                <input type="text" name="search" class="form-control" placeholder="Search Products" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+            </div>
+            <div class="col-md-3 col-sm-6 mt-2">
+                <button type="submit" class="btn btn-primary">Filter</button>
+                <button type="button" class="btn btn-secondary" onclick="window.location.href='products.php';">Reset</button>
+            </div>
         </div>
-      </form>
-    </div>
+    </form>
+  </div>
+
     
     <!-- product line -->
     <div class="container">

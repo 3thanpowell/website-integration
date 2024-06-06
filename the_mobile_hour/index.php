@@ -3,7 +3,7 @@
 require_once 'model/functions.php';
 
 //getProducts $limit=8
-$products = getProducts(8, true);
+$products = getProducts([], '', '', 8);
 
 //splits products into 4 chunks for display
 $productChunks = array_chunk($products, 4);
