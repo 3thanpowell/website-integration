@@ -32,15 +32,63 @@ function logoutUser() {
   exit;
 }
 
-// index product lists
-function getProducts($limit = 8) {
+// product listing and search/filter
+function getProducts($filters = [], $sort = '', $search = '', $limit = null) {
   global $pdo;
-  $sql = 'SELECT p.product_id, p.product_name, p.price, i.image_url 
+  $sql = 'SELECT p.product_id, p.product_name, p.price, i.image_url, p.manufacturer 
           FROM product p 
-          JOIN images i ON p.product_id = i.product_id 
-          LIMIT :limit';
-  $stmt = $pdo->prepare($sql);
-  $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+          JOIN images i ON p.product_id = i.product_id';
+  $whereClauses = [];
+  $params = [];
+
+  if (!empty($filters['brand'])) {
+      $whereClauses[] = 'p.manufacturer = :brand';
+      $params['brand'] = $filters['brand'];
+  }
+
+  if (!empty($search)) {
+      $whereClauses[] = 'p.product_name LIKE :search';
+      $params['search'] = '%' . $search . '%';
+  }
+
+  if ($whereClauses) {
+      $sql .= ' WHERE ' . implode(' AND ', $whereClauses);
+  }
+
+  if (!empty($sort)) {
+      if ($sort == 'name_asc') {
+          $sql .= ' ORDER BY p.product_name ASC';
+      } elseif ($sort == 'name_desc') {
+          $sql .= ' ORDER BY p.product_name DESC';
+      } elseif ($sort == 'price_asc') {
+          $sql .= ' ORDER BY p.price ASC';
+      } elseif ($sort == 'price_desc') {
+          $sql .= ' ORDER BY p.price DESC';
+      }
+  }
+
+  if ($limit !== null) {
+      $sql .= ' LIMIT :limit';
+      $stmt = $pdo->prepare($sql);
+      foreach ($params as $key => $value) {
+          $stmt->bindValue(':' . $key, $value);
+      }
+      $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+  } else {
+      $stmt = $pdo->prepare($sql);
+      foreach ($params as $key => $value) {
+          $stmt->bindValue(':' . $key, $value);
+      }
+  }
   $stmt->execute();
   return $stmt->fetchAll();
 }
+
+//returns current list of brands
+function getAllBrands() {
+  global $pdo;
+  $sql = 'SELECT DISTINCT manufacturer FROM product';
+  $stmt = $pdo->query($sql);
+  return $stmt->fetchAll(PDO::FETCH_COLUMN);
+}
+
