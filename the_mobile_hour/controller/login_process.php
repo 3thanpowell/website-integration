@@ -21,16 +21,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $_SESSION['firstname'] = $user['firstname'];
 
       //redirect to dash
-      header('Location: ../view/dashboard.php');
+     switch ($user['user_role']) {
+      case 'admin':
+        header('Location: ../view/admin_dashboard.php');
+        break;
+        
+      case 'manager':
+        header('Location: ../view/manager_dashboard.php');
+        break;
+
+      default:
+        header('Location: ../view/dashboard.php');
+        break;
+      
+      }
       exit;
 
     } else {
       header('Location: ../view/login.php?error=1');
       exit;
-
-    }
+    }   
 
   } else {
-  header('Location: ../view/login.php');
-  exit;
-}
+    header('Location: ../view/login.php');
+    exit;
+  }

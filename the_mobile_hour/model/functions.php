@@ -23,10 +23,24 @@ function validateUser($email, $password) {
   return false;
 }
 
+// logout destroy session
 function logoutUser() {
   session_start();
   session_unset();
   session_destroy();
   header('Location: ../view/login.php');
   exit;
+}
+
+// index product lists
+function getProducts($limit = 8) {
+  global $pdo;
+  $sql = 'SELECT p.product_id, p.product_name, p.price, i.image_url 
+          FROM product p 
+          JOIN images i ON p.product_id = i.product_id 
+          LIMIT :limit';
+  $stmt = $pdo->prepare($sql);
+  $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+  $stmt->execute();
+  return $stmt->fetchAll();
 }

@@ -1,3 +1,16 @@
+<?php
+
+require_once 'model/functions.php';
+
+//getProducts limit-8
+$products = getProducts();
+
+//splits products into 4 chunks for display
+$productChunks = array_chunk($products, 4);
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,7 +44,6 @@
 
 
 <body>
-
   
 
   <header>
@@ -176,7 +188,7 @@
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m7.171 12.906-2.153 6.411 2.672-.89 1.568 2.34 1.825-5.183m5.73-2.678 2.154 6.411-2.673-.89-1.568 2.34-1.825-5.183M9.165 4.3c.58.068 1.153-.17 1.515-.628a1.681 1.681 0 0 1 2.64 0 1.68 1.68 0 0 0 1.515.628 1.681 1.681 0 0 1 1.866 1.866c-.068.58.17 1.154.628 1.516a1.681 1.681 0 0 1 0 2.639 1.682 1.682 0 0 0-.628 1.515 1.681 1.681 0 0 1-1.866 1.866 1.681 1.681 0 0 0-1.516.628 1.681 1.681 0 0 1-2.639 0 1.681 1.681 0 0 0-1.515-.628 1.681 1.681 0 0 1-1.867-1.866 1.681 1.681 0 0 0-.627-1.515 1.681 1.681 0 0 1 0-2.64c.458-.361.696-.935.627-1.515A1.681 1.681 0 0 1 9.165 4.3ZM14 9a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"/>
               </svg>
 
-              <p class="ml-2 text-secondary">FREE YOGHURT OVER $200*</p>
+              <p class="ml-2 text-secondary">FREE YOGHURT OVER $876.72*</p>
 
             </div>
           </div>
@@ -245,186 +257,36 @@
       </div>
     </div>
 
-    <!-- product line 1 -->
+    <!-- product line -->
     <div class="container">
-      <div class="row justify-content-center">
-
-        <!-- product -->
-        <div class="col-lg-3 col-md-5 col-sm-5 col-5 pt-2 ">
-          <div class="card bg-light">
-            <img class="card-img-top" src="images/placeholder.jpg" alt="Card image cap">
-            <div class="card-body">
-              <h5 class="card-title">Product Name</h5>
-            
-              <div class="row d-flex">
-                <div class="col-12">
-                  <p class="pt-2"><strong>$19.99</strong></p>
-                </div>
-                
-                <div class="col-12">
-                  <a href="#" class="btn btn-info">Order Now</a>
-                </div>
-              </div>
-              
-            </div>
-          </div>
-        </div>
-
-        <!-- product -->
-        <div class="col-lg-3 col-md-5 col-sm-5 col-5 pt-2">
-          <div class="card bg-light">
-            <img class="card-img-top" src="images/placeholder.jpg" alt="Card image cap">
-            <div class="card-body">
-              <h5 class="card-title">Product Name</h5>
-            
-              <div class="row d-flex">
-                <div class="col-12">
-                  <p class="pt-2"><strong>$19.99</strong></p>
-                </div>
-                
-                <div class="col-12">
-                  <a href="#" class="btn btn-info">Order Now</a>
+      <?php foreach ($productChunks as $productRow): ?>
+        <div class="row justify-content-center pt-3">
+          <?php foreach ($productRow as $product): ?>
+            <!-- product -->
+            <div class="col-lg-3 col-md-5 col-sm-5 col-5 pt-2">
+              <div class="card bg-light">
+                <img class="card-img-top" src="<?php echo htmlspecialchars($product['image_url']); ?>" alt="Product image">
+                <div class="card-body">
+                  <h5 class="card-title"><?php echo htmlspecialchars($product['product_name']); ?></h5>
+                  <div class="row d-flex">
+                    <div class="col-12">
+                      <p class="pt-2"><strong>$<?php echo htmlspecialchars($product['price']); ?></strong></p>
+                    </div>
+                    <div class="col-12">
+                      <a href="#" class="btn btn-info">Order Now</a>
+                    </div>
+                  </div>
                 </div>
               </div>
-              
             </div>
-          </div>
+          <?php endforeach; ?>
         </div>
-
-        <!-- product -->
-        <div class="col-lg-3 col-md-5 col-sm-5 col-5 pt-2">
-          <div class="card bg-light">
-            <img class="card-img-top" src="images/placeholder.jpg" alt="Card image cap">
-            <div class="card-body">
-              <h5 class="card-title">Product Name</h5>
-            
-              <div class="row d-flex">
-                <div class="col-12">
-                  <p class="pt-2"><strong>$19.99</strong></p>
-                </div>
-                
-                <div class="col-12">
-                  <a href="#" class="btn btn-info">Order Now</a>
-                </div>
-              </div>
-              
-            </div>
-          </div>
-        </div>
-
-        <!-- product -->
-        <div class="col-lg-3 col-md-5 col-sm-5 col-5 pt-2">
-          <div class="card bg-light">
-            <img class="card-img-top" src="images/placeholder.jpg" alt="Card image cap">
-            <div class="card-body">
-              <h5 class="card-title">Product Name</h5>
-            
-              <div class="row d-flex">
-                <div class="col-12">
-                  <p class="pt-2"><strong>$19.99</strong></p>
-                </div>
-                
-                <div class="col-12">
-                  <a href="#" class="btn btn-info">Order Now</a>
-                </div>
-              </div>
-              
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <?php endforeach; ?>
     </div>
+    
 
-    <!-- product line 2 -->
-    <div class="container">
-      <div class="row justify-content-center pt-3">
 
-        <!-- product -->
-        <div class="col-lg-3 col-md-5 col-sm-5 col-5 pt-2">
-          <div class="card bg-light">
-            <img class="card-img-top" src="images/placeholder.jpg" alt="Card image cap">
-            <div class="card-body">
-              <h5 class="card-title">Product Name</h5>
-            
-              <div class="row d-flex">
-                <div class="col-12">
-                  <p class="pt-2"><strong>$19.99</strong></p>
-                </div>
-                
-                <div class="col-12">
-                  <a href="#" class="btn btn-info">Order Now</a>
-                </div>
-              </div>
-              
-            </div>
-          </div>
-        </div>
-
-        <!-- product -->
-        <div class="col-lg-3 col-md-5 col-sm-5 col-5 pt-2">
-          <div class="card bg-light">
-            <img class="card-img-top" src="images/placeholder.jpg" alt="Card image cap">
-            <div class="card-body">
-              <h5 class="card-title">Product Name</h5>
-            
-              <div class="row d-flex">
-                <div class="col-12">
-                  <p class="pt-2"><strong>$19.99</strong></p>
-                </div>
-                
-                <div class="col-12">
-                  <a href="#" class="btn btn-info">Order Now</a>
-                </div>
-              </div>
-              
-            </div>
-          </div>
-        </div>
-
-        <!-- product -->
-        <div class="col-lg-3 col-md-5 col-sm-5 col-5 pt-2">
-          <div class="card bg-light">
-            <img class="card-img-top" src="images/placeholder.jpg" alt="Card image cap">
-            <div class="card-body">
-              <h5 class="card-title">Product Name</h5>
-            
-              <div class="row d-flex">
-                <div class="col-12">
-                  <p class="pt-2"><strong>$19.99</strong></p>
-                </div>
-                
-                <div class="col-12">
-                  <a href="#" class="btn btn-info">Order Now</a>
-                </div>
-              </div>
-              
-            </div>
-          </div>
-        </div>
-
-        <!-- product -->
-        <div class="col-lg-3 col-md-5 col-sm-5 col-5 pt-2">
-          <div class="card bg-light">
-            <img class="card-img-top" src="images/placeholder.jpg" alt="Card image cap">
-            <div class="card-body">
-              <h5 class="card-title">Product Name</h5>
-            
-              <div class="row d-flex">
-                <div class="col-12">
-                  <p class="pt-2"><strong>$199.99</strong></p>
-                </div>
-                
-                <div class="col-12">
-                  <a href="#" class="btn btn-info">Order Now</a>
-                </div>
-              </div>
-              
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+   
   </main>
 
   <footer>
