@@ -66,9 +66,9 @@
           <h3 class="">New Customers</h3>
           <p class="">Save your address and keep track of your orders by creating an account.</p> 
 
-          <button type="button" class="btn btn-info btn-lg m-3">
-            <a href="signup.php" class="text-white" style="text-decoration: none; !important">Register</a>
-          </button>
+          
+          <a href="signup.php" class="text-white btn btn-info btn-lg m-3" style="text-decoration: none; !important">Register</a>
+          
           </div>
       </div>
     </div>
