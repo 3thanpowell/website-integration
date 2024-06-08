@@ -2,47 +2,46 @@
 
 //processes login form data
 
-require_once '../model/functions.php';
 session_start();
+require_once '../model/functions.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
 
-
     $user = validateUser($email, $password);
-
-    
-
     if ($user) {
-      $_SESSION['user_id'] = $user['user_id'];
-      $_SESSION['role'] = $user['user_role'];
-      $_SESSION['user_email'] = $user['user_email'];
-      $_SESSION['firstname'] = $user['firstname'];
 
-      //redirect to dash
-     switch ($user['user_role']) {
-      case 'admin':
-        header('Location: ../view/admin_dashboard.php');
-        break;
-        
-      case 'manager':
-        header('Location: ../view/manager_dashboard.php');
-        break;
+        // store user information in the session
+        $_SESSION['user_id'] = $user['user_id'];
+        $_SESSION['user_role'] = $user['user_role'];
+        $_SESSION['user_email'] = $user['user_email'];
+        $_SESSION['firstname'] = $user['firstname'];
+        $_SESSION['lastname'] = $user['lastname'];
+        $_SESSION['user_phone'] = $user['user_phone'];
+        $_SESSION['user_address'] = $user['user_address'];
+        $_SESSION['postcode'] = $user['postcode'];
+        $_SESSION['city'] = $user['city'];
+        $_SESSION['state'] = $user['state'];
 
-      default:
-        header('Location: ../view/dashboard.php');
-        break;
-      
-      }
-      exit;
+        // redirect based on role
+        if ($user['user_role'] === 'admin') {
 
+            header('Location: ../view/admin_dashboard.php');
+
+        } elseif ($user['user_role'] === 'manager') {
+
+            header('Location: ../view/manager_dashboard.php');
+
+        } else {
+
+            header('Location: ../view/dashboard.php');
+
+        }
+        exit();
     } else {
-      header('Location: ../view/login.php?error=1');
-      exit;
-    }   
-
-  } else {
-    header('Location: ../view/login.php');
-    exit;
-  }
+        // handle login failure
+        header('Location: login.php?error=invalid_credentials');
+        exit();
+    }
+}
