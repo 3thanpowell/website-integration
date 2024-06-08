@@ -1,6 +1,9 @@
 <?php
-
+session_start();
 require_once 'model/functions.php';
+
+$isLoggedIn = isset($_SESSION['user_id']);
+$userRole = $isLoggedIn ? $_SESSION['user_role'] : '';
 
 //getProducts $limit=8
 $products = getProducts([], '', '', 8);
@@ -88,15 +91,59 @@ $productChunks = array_chunk($products, 4);
 
           <!-- myacc -->
           <li class="nav-item ml-2">
-            <a class="nav-link" href="view/login.php">
+            <!-- checks if user is logged in -->
+            <?php if ($isLoggedIn): ?>
 
-            <!-- myacc svg - person (fill) -->
-            <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
-            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
-            </svg> 
+              <!-- if logged in, check which type -->
+              <?php if ($userRole === 'admin'): ?>
+
+                <a class="nav-link" href="view/admin_dashboard.php">
+
+                  <!-- myacc svg - person (fill) -->
+                  <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                  </svg> 
           
-            My Account 
-            </a>
+                  My Account 
+                </a>
+
+              <?php elseif ($userRole === 'manager'): ?>
+
+                <a class="nav-link" href="view/manager_dashboard.php">
+
+                  <!-- myacc svg - person (fill) -->
+                  <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                  </svg> 
+          
+                  My Account 
+                </a> 
+              
+              <?php else: ?>
+                
+                <a class="nav-link" href="view/dashboard.php">
+
+                  <!-- myacc svg - person (fill) -->
+                  <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                  </svg> 
+          
+                  My Account 
+                </a>
+              
+              <?php endif; ?>
+
+            <?php else: ?>
+                <a class="nav-link" href="view/login.php">
+
+                  <!-- myacc svg - person (fill) -->
+                  <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                  </svg> 
+          
+                  My Account 
+                </a>
+            <?php endif; ?>
           </li>
 
         <ul>
