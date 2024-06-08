@@ -92,3 +92,17 @@ function getAllBrands() {
   return $stmt->fetchAll(PDO::FETCH_COLUMN);
 }
 
+//returns product details
+function getProductById($product_id) {
+    global $pdo;
+    $sql = 'SELECT p.product_id, p.product_name, p.price, p.product_model, i.image_url, 
+            f.weight, f.dimensions, f.OS, f.screensize, f.resolution, 
+            f.CPU, f.RAM, f.storage, f.battery, f.rear_camera, f.front_camera
+            FROM product p
+            JOIN images i ON p.product_id = i.product_id
+            JOIN feature f ON p.feature_id = f.feature_id
+            WHERE p.product_id = :product_id';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['product_id' => $product_id]);
+    return $stmt->fetch();
+}
