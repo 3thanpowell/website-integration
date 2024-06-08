@@ -1,8 +1,61 @@
 <?php
 
-//user-login verification
+
 require_once 'db.php';
 
+// register a user
+function registerUser($email, $password, $firstname, $lastname, $phone, $address, $postcode, $city, $state) {
+    global $pdo;
+    try {
+        // start transaction
+        $pdo->beginTransaction();
+
+        // insert into user table
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        $sql = 'INSERT INTO user (user_role, user_password) VALUES (:role, :password)';
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            'role' => 'customer',
+            'password' => $hashed_password
+        ]);
+        
+        // get last inserted user_id
+        $user_id = $pdo->lastInsertId();
+
+        // insert into personal_info table
+        $sql = 'INSERT INTO personal_info (user_id, firstname, lastname, user_phone, user_email, user_address, postcode, city, state) 
+                VALUES (:user_id, :firstname, :lastname, :phone, :email, :address, :postcode, :city, :state)';
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            'user_id' => $user_id,
+            'firstname' => $firstname,
+            'lastname' => $lastname,
+            'phone' => $phone,
+            'email' => $email,
+            'address' => $address,
+            'postcode' => $postcode,
+            'city' => $city,
+            'state' => $state
+        ]);
+
+        // Commit transaction
+        $pdo->commit();
+        return true;
+    } catch (PDOException $e) {
+        // rollback transaction if error
+        $pdo->rollBack();
+
+        // check for duplicate entry
+        if ($e->getCode() == 23000) {
+            return 'duplicate';
+        } else {
+            echo "Error: " . $e->getMessage();
+            return false;
+        }
+    }
+}
+
+//user-login verification
 function validateUser($email, $password) {
   global $pdo;
   $sql = 'SELECT u.user_id, u.user_role, p.user_email, u.user_password, p.firstname
