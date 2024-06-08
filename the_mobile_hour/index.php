@@ -277,7 +277,7 @@ $productChunks = array_chunk($products, 4);
                       <p class="pt-2"><strong>$<?php echo htmlspecialchars($product['price']); ?></strong></p>
                     </div>
                     <div class="col-12">
-                      <a href="#" class="btn btn-info">Order Now</a>
+                      <a href= "view/product.php?id=<?php echo htmlspecialchars($product['product_id']); ?>" class="btn btn-info">Order Now</a>
                     </div>
                   </div>
                 </div>
