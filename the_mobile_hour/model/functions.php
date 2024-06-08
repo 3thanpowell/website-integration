@@ -58,7 +58,8 @@ function registerUser($email, $password, $firstname, $lastname, $phone, $address
 //user-login verification
 function validateUser($email, $password) {
   global $pdo;
-  $sql = 'SELECT u.user_id, u.user_role, p.user_email, u.user_password, p.firstname
+  
+  $sql = 'SELECT u.user_id, u.user_role, p.user_email, u.user_password, p.firstname, p.lastname, p.user_phone, p.user_email, p.user_address, p.postcode, p.city, p.state
           FROM user u
           JOIN personal_info p ON u.user_id = p.user_id
           WHERE p.user_email = :email';
