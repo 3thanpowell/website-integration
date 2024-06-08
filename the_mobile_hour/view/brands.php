@@ -50,8 +50,8 @@
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12 pt-2">
                         <div class="card bg-light text-center">
                             <div class="card-body">
-                                <h5 class="card-title"><?php echo htmlspecialchars($brand); ?></h5>
-                                <a href="products.php?brand=<?php echo urlencode($brand); ?>" class="btn btn-info">View Products</a>
+                                <h1 class="card-title display-4"><?php echo htmlspecialchars($brand); ?></h1>
+                                <a href="products.php?brand=<?php echo urlencode($brand); ?>" class="btn btn-dark">View Products</a>
                             </div>
                         </div>
                     </div>
