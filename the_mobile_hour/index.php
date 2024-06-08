@@ -13,7 +13,6 @@ $productChunks = array_chunk($products, 4);
 
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
