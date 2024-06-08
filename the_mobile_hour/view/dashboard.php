@@ -1,14 +1,15 @@
 <?php
-// view/dashboard.php
+
 session_start();
 
-// Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
+// kicks user if not logged in or not a customer
+if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] != 'customer') {
     header('Location: login.php');
-    exit;
+    exit();
 }
 
-$user_role = $_SESSION['role'];
+$firstname = $_SESSION['firstname'];
+$user_role = $_SESSION['user_role']; //this is not needed, delete along with the calls to $user_role later
 ?>
 
 <!DOCTYPE html>
@@ -28,7 +29,7 @@ $user_role = $_SESSION['role'];
 
 
     <div class="container">
-        <h2>Welcome, <?php echo htmlspecialchars($_SESSION['firstname']); ?></h2>
+        <h2>Welcome, <?php echo htmlspecialchars($firstname); ?></h2>
 
         <?php if ($user_role == 'admin'): ?>
             <h3>Admin Dashboard</h3>
