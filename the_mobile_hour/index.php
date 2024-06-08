@@ -118,7 +118,9 @@ $productChunks = array_chunk($products, 4);
 
         <!-- product slide -->
         <div class="carousel-item active">
-          <img class="d-block w-100" src="images/carousel_cellfish.jpg" alt="cellfish product image">
+          <a href="view/product.php?id=1">
+            <img class="d-block w-100" src="images/carousel_cellfish.jpg" alt="cellfish product image">
+          </a>
         </div>
 
         <!-- brand slide -->
