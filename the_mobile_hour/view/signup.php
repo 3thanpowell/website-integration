@@ -83,17 +83,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
           </div>
 
-          <div class="form-group">
+          <div class="form-group position-relative">
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" class="form-control" aria-describedby="passwordHelpBlock" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$" required>
+            <input type="password" id="password" name="password" class="form-control" 
+            aria-describedby="passwordHelpBlock" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$" required>
             <small id="passwordHelpBlock" class="form-text text-muted">
               Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.
             </small>
+              <span class="position-absolute" id="togglePassword" style="cursor: pointer; right: 10px; top: 40px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                  <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                  <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                </svg>
+              </span>
           </div>
 
-          <div class="form-group">
-            <label for="confirmPassword"> Confirm Password</label>
-            <input type="password" id="confirmPassword" class="form-control" required>
+          <div class="form-group position-relative">
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required>
+              <span class="position-absolute" id="toggleConfirmPassword" style="cursor: pointer; right: 10px; top: 40px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                  <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                  <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                </svg>
+              </span>
           </div>
           
           <div class="form-group">
@@ -148,6 +161,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <script src="../js/signupValidation.js"></script>
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script> 
+  
+  <!-- password toggle -->
+  <script>
+    document.getElementById('togglePassword').addEventListener('click', function (e) {
+      // Toggle the type attribute
+      const passwordField = document.getElementById('password');
+      const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordField.setAttribute('type', type);
+      // Toggle the eye slash icon
+      this.classList.toggle('fa-eye-slash');
+    });
+
+    document.getElementById('toggleConfirmPassword').addEventListener('click', function (e) {
+      // Toggle the type attribute
+      const confirmPasswordField = document.getElementById('confirmPassword');
+      const type = confirmPasswordField.getAttribute('type') === 'password' ? 'text' : 'password';
+      confirmPasswordField.setAttribute('type', type);
+      // Toggle the eye slash icon
+      this.classList.toggle('fa-eye-slash');
+    });
+  </script>
 </body>
 </html>
