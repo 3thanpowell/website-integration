@@ -16,9 +16,17 @@ $user_role = $_SESSION['role'];
 <head>
     <meta charset="UTF-8">
     <title>Dashboard</title>
-    <link rel="stylesheet" href="path/to/bootstrap.css">
+
+    <!-- bootstrap CDN link -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
 </head>
 <body>
+
+    <!-- navbar -->
+    <?php include 'navbar.php'; ?>
+
+
     <div class="container">
         <h2>Welcome, <?php echo htmlspecialchars($_SESSION['firstname']); ?></h2>
 
@@ -42,5 +50,8 @@ $user_role = $_SESSION['role'];
         <a href="../controller/logout.php" class="btn btn-primary">Logout</a>
     </div>
     <script src="path/to/bootstrap.js"></script>
+
+    <!-- footer -->
+    <?php include 'footer.php'; ?>
 </body>
 </html>
