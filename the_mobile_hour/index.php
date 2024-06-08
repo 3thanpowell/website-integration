@@ -103,7 +103,7 @@ $productChunks = array_chunk($products, 4);
                     <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
                   </svg> 
           
-                  My Account 
+                  <?php echo htmlspecialchars($_SESSION['firstname']); ?> 
                 </a>
 
               <?php elseif ($userRole === 'manager'): ?>
@@ -115,7 +115,7 @@ $productChunks = array_chunk($products, 4);
                     <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
                   </svg> 
           
-                  My Account 
+                  <?php echo htmlspecialchars($_SESSION['firstname']); ?>  
                 </a> 
               
               <?php else: ?>
@@ -127,7 +127,7 @@ $productChunks = array_chunk($products, 4);
                     <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
                   </svg> 
           
-                  My Account 
+                  <?php echo htmlspecialchars($_SESSION['firstname']); ?>  
                 </a>
               
               <?php endif; ?>
@@ -404,12 +404,23 @@ $productChunks = array_chunk($products, 4);
 
         <!-- login -->
         <div class="col-lg-2 col-12 col-md-3">
-          <h2 class="ml-auto mr-3">
-            Have An Account?
-          </h2>
+          <?php if ($isLoggedIn): ?>
+              <h2 class="ml-auto mr-3">
+                All done? 
+              </h2>
 
-          <a href="view/login.php" style="font-size: 16px; !important">Login</a>
+              <a href="../controller/logout.php" style="font-size: 16px; !important"> Logout </a>
 
+      
+            <?php else: ?>
+              
+              <h2 class="ml-auto mr-3">
+                Have An Account?
+              </h2>
+
+              <a href="login.php" style="font-size: 16px; !important">Login</a>
+
+            <?php endif; ?>
         </div>
       </div>
     </div>
