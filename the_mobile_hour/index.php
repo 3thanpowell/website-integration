@@ -116,28 +116,32 @@ $productChunks = array_chunk($products, 4);
       
       <div class="carousel-inner">
 
-        <!-- kode brand slide -->
+        <!-- product slide -->
         <div class="carousel-item active">
-          <img class="d-block w-100" src="images/kode_slide.png" alt="Kode brand">
+          <img class="d-block w-100" src="images/carousel_cellfish.jpg" alt="cellfish product image">
         </div>
 
-        <!-- cellfish 2 item slide -->
+        <!-- brand slide -->
         <div class="carousel-item">
-          <a href="product.php?id=INSERT_ID HERE">
-            <img class="d-block w-100" src="images/cellfish_slide.png" alt="Cellfish 2 product"> 
+          <a href="view/products.php?brand=PANDA">
+            <img class="d-block w-100" src="images/carousel_panda.jpg" alt="panda brand image"> 
           </a>
         </div>
 
+        <!-- brand slide -->
         <div class="carousel-item">
-          <img class="d-block w-100" src="images/kode_slide.png" alt="">
+          <a href="view/products.php?brand=UD">
+            <img class="d-block w-100" src="images/carousel_ud.jpg" alt="ud brand image">
+          </a>
         </div>
-      </div>
+        </div>
+
       <a class="carousel-control-prev" data-target="#carouselExampleIndicators" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="carousel-control-prev-icon bg-dark rounded" aria-hidden="true"></span>
         <span class="sr-only">Previous</span>
       </a>
       <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="carousel-control-next-icon bg-dark rounded" aria-hidden="true"></span>
         <span class="sr-only">Next</span>
       </a>
     </div>
@@ -235,7 +239,7 @@ $productChunks = array_chunk($products, 4);
       <div class="row"> 
         <div class="col-lg-8 col-md-12 col-sm-12">
           
-          <img class="img"src="images/display_brand_shishu.png" alt="" width="100%" height="100%">
+          <a href="view/products.php?brand=SHISHU"><img class="img"src="images/display_brand_shishu.png" alt="" width="100%" height="100%"></a>
          
         </div>
 
@@ -243,13 +247,13 @@ $productChunks = array_chunk($products, 4);
           <div class="row">
             <div class="col-lg-12 col-sm-6 col-md-6 mb-lg-5 mb-md-3">
 
-              <img class="img-fluid"src="images/display_brand_kode.png" alt="" width="100%" height="100%">
+              <a href="view/products.php?brand=KODE"><img class="img-fluid"src="images/display_brand_kode.png" alt="" width="100%" height="100%"></a>
 
             </div>
 
 
             <div class="col-lg-12 col-sm-6 col-md-6">
-              <img class="img-fluid" src="images/display_brand_panda.png" alt="" width="100%" height="100%">
+              <a href="view/products.php?brand=PANDA"><img class="img-fluid" src="images/display_brand_panda.png" alt="" width="100%" height="100%"></a>
             </div> 
 
           </div>
