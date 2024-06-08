@@ -1,3 +1,5 @@
+<?php $isLoggedIn = isset($_SESSION['user_id']); ?>
+
 <footer>
     <div class="container-fluid bg-light border mt-5">
       <div class="row mr-2 ml-2 pt-3">
@@ -61,11 +63,24 @@
 
         <!-- login -->
         <div class="col-lg-2 col-12 col-md-3">
-          <h2 class="ml-auto mr-3">
-            Have An Account?
-          </h2>
 
-          <a href="login.php" style="font-size: 16px; !important">Login</a>
+          <?php if ($isLoggedIn): ?>
+            <h2 class="ml-auto mr-3">
+              All done? 
+            </h2>
+
+            <a href="../controller/logout.php" style="font-size: 16px; !important"> Logout </a>
+
+    
+          <?php else: ?>
+            
+            <h2 class="ml-auto mr-3">
+              Have An Account?
+            </h2>
+
+            <a href="login.php" style="font-size: 16px; !important">Login</a>
+
+          <?php endif; ?>
 
         </div>
       </div>
