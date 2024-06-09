@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['postcode'] = $user['postcode'];
         $_SESSION['city'] = $user['city'];
         $_SESSION['state'] = $user['state'];
+        $_SESSION['customer_id'] = $user['customer_id'];
 
         // redirect based on role
         if ($user['user_role'] === 'admin') {
