@@ -7,10 +7,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['order_product_id'])) {
     $priceSold = $_POST['price'];
 
     if (placeOrder($customerId, $productId, $priceSold)) {
-        header('Location: order_success.php');
+        header('Location: ../view/order_success.php');
         exit();
     } else {
-        header('Location: order_failed.php');
+        header('Location: ../view/order_failed.php');
         exit();
     }
 }
