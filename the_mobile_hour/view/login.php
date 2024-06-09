@@ -64,7 +64,7 @@
         <div class="col-lg-6 col-sm-12 col-md-12 border rounded bg-light p-5">
 
           <h3 class="">New Customers</h3>
-          <p class="">Save your address and keep track of your orders by creating an account.</p> 
+          <p class="">Place your orders and keep track of them too, by creating an account!</p> 
 
           
           <a href="signup.php" class="text-white btn btn-info btn-lg m-3" style="text-decoration: none; !important">Register</a>
