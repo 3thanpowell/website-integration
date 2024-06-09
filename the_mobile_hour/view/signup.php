@@ -1,8 +1,10 @@
 <?php
 require_once '../model/functions.php';
 
+// error message to be displayed on error
 $errorMessage = '';
 
+// empty variables to be left filled in on error 
 $firstname = '';
 $lastname = '';
 $email = '';
@@ -111,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           
           <div class="form-group">
             <label for="phone">Phone Number</label>
-            <input type="tel" class="form-control" name="phone" id="phone" pattern="^(?:\+?61|0)[2-478](?:[ -]?[0-9]){8}$" title="Please enter a valid Australian phone number" value="<?php echo htmlspecialchars($phone); ?>" required>
+            <input type="tel" class="form-control" name="phone" id="phone" pattern='^(?:\+?61|0)[2-478](?:[ \-]?[0-9]){8}$' title="Please enter a valid Australian phone number" value="<?php echo htmlspecialchars($phone); ?>" required>
           </div>
 
           <div class="form-group">
@@ -163,24 +165,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script> 
   
-  <!-- password toggle -->
+  <!-- show password toggle -->
   <script>
     document.getElementById('togglePassword').addEventListener('click', function (e) {
-      // Toggle the type attribute
+    
       const passwordField = document.getElementById('password');
       const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
       passwordField.setAttribute('type', type);
-      // Toggle the eye slash icon
-      this.classList.toggle('fa-eye-slash');
     });
 
     document.getElementById('toggleConfirmPassword').addEventListener('click', function (e) {
-      // Toggle the type attribute
+    
       const confirmPasswordField = document.getElementById('confirmPassword');
       const type = confirmPasswordField.getAttribute('type') === 'password' ? 'text' : 'password';
       confirmPasswordField.setAttribute('type', type);
-      // Toggle the eye slash icon
-      this.classList.toggle('fa-eye-slash');
     });
   </script>
 </body>
