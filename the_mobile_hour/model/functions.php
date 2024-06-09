@@ -55,11 +55,12 @@ function registerUser($email, $password, $firstname, $lastname, $phone, $address
     }
 }
 
+
 //user-login verification
 function validateUser($email, $password) {
   global $pdo;
   
-  $sql = 'SELECT u.user_id, u.user_role, p.user_email, u.user_password, p.firstname, p.lastname, p.user_phone, p.user_email, p.user_address, p.postcode, p.city, p.state
+  $sql = 'SELECT u.user_id, u.user_role, p.user_email, u.user_password, p.firstname, p.lastname, p.user_phone, p.user_email, p.user_address, p.postcode, p.city, p.state, p.customer_id
           FROM user u
           JOIN personal_info p ON u.user_id = p.user_id
           WHERE p.user_email = :email';
@@ -77,6 +78,7 @@ function validateUser($email, $password) {
   return false;
 }
 
+
 // logout destroy session
 function logoutUser() {
   session_start();
@@ -85,6 +87,8 @@ function logoutUser() {
   header('Location: ../view/login.php');
   exit;
 }
+
+
 
 // product listing and search/filter
 function getProducts($filters = [], $sort = '', $search = '', $limit = null) {
@@ -138,6 +142,8 @@ function getProducts($filters = [], $sort = '', $search = '', $limit = null) {
   return $stmt->fetchAll();
 }
 
+
+
 //returns current list of brands
 function getAllBrands() {
   global $pdo;
@@ -145,6 +151,7 @@ function getAllBrands() {
   $stmt = $pdo->query($sql);
   return $stmt->fetchAll(PDO::FETCH_COLUMN);
 }
+
 
 //returns product details
 function getProductById($product_id) {
@@ -160,3 +167,58 @@ function getProductById($product_id) {
     $stmt->execute(['product_id' => $product_id]);
     return $stmt->fetch();
 }
+
+
+//place order - !!quantity set to 1, change if implementing bulk ordr
+function placeOrder($customerId, $productId, $priceSold) {
+    global $pdo;
+
+    try {
+        // start transaction
+        $pdo->beginTransaction();
+
+        // insert into order table
+        $sql = 'INSERT INTO `order` (order_date, customer_id, order_status) VALUES (NOW(), :customer_id, "Processing")';
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['customer_id' => $customerId]);
+
+        // last inserted order number
+        $orderNumber = $pdo->lastInsertId();
+
+        // insert into order_detail table
+        $sql = 'INSERT INTO order_detail (product_id, quantity, price_sold, order_number) VALUES (:product_id, 1, :price_sold, :order_number)';
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            'product_id' => $productId,
+            'price_sold' => $priceSold,
+            'order_number' => $orderNumber
+        ]);
+
+        // commit
+        $pdo->commit();
+
+        return true;
+    } catch (Exception $e) {
+        // rolback if error
+        $pdo->rollBack();
+        error_log("Order failed: " . $e->getMessage());
+        return false;
+    }
+}
+
+
+// gets recent orders by customer_id
+function getRecentOrders($customerId) {
+    global $pdo;
+    $sql = 'SELECT o.order_number, o.order_date, o.order_status, p.product_name
+            FROM `order` o
+            JOIN order_detail od ON o.order_number = od.order_number
+            JOIN product p ON od.product_id = p.product_id
+            WHERE o.customer_id = :customer_id
+            ORDER BY o.order_date DESC';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['customer_id' => $customerId]);
+    return $stmt->fetchAll();
+}
+
+
