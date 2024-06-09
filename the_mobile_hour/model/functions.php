@@ -207,15 +207,17 @@ function placeOrder($customerId, $productId, $priceSold) {
 }
 
 
-// gets recent orders by customer_id
+// gets 3 recent orders by customer_id
 function getRecentOrders($customerId) {
     global $pdo;
-    $sql = 'SELECT o.order_number, o.order_date, o.order_status, p.product_name
+    $sql = 'SELECT o.order_number, o.order_date, o.order_status, o.order_delivery_date, p.product_name, i.image_url
             FROM `order` o
             JOIN order_detail od ON o.order_number = od.order_number
             JOIN product p ON od.product_id = p.product_id
+            JOIN images i ON p.product_id = i.product_id
             WHERE o.customer_id = :customer_id
-            ORDER BY o.order_date DESC';
+            ORDER BY o.order_date DESC
+            LIMIT 3';
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['customer_id' => $customerId]);
     return $stmt->fetchAll();
