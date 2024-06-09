@@ -45,7 +45,7 @@ function registerUser($email, $password, $firstname, $lastname, $phone, $address
         // rollback transaction if error
         $pdo->rollBack();
 
-        // check for duplicate entry
+        // check for duplicate email
         if ($e->getCode() == 23000) {
             return 'duplicate';
         } else {
@@ -56,7 +56,7 @@ function registerUser($email, $password, $firstname, $lastname, $phone, $address
 }
 
 
-//user-login verification
+//user-login verification and grabs info
 function validateUser($email, $password) {
   global $pdo;
   
@@ -222,5 +222,76 @@ function getRecentOrders($customerId) {
     $stmt->execute(['customer_id' => $customerId]);
     return $stmt->fetchAll();
 }
+
+
+// get all orders by customer_id - no limit
+function getAllOrders($customerId) {
+    global $pdo;
+    $sql = 'SELECT o.order_number, o.order_date, o.order_status, o.order_delivery_date, p.product_name, i.image_url
+            FROM `order` o
+            JOIN order_detail od ON o.order_number = od.order_number
+            JOIN product p ON od.product_id = p.product_id
+            LEFT JOIN images i ON p.product_id = i.product_id
+            WHERE o.customer_id = :customer_id
+            ORDER BY o.order_date DESC';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['customer_id' => $customerId]);
+    return $stmt->fetchAll();
+}
+
+
+// cancel order - only if order status is 'Processing'
+function cancelOrder($orderNumber) {
+    global $pdo;
+    $sql = 'UPDATE `order` SET order_status = "Cancelled" WHERE order_number = :order_number AND order_status = "Processing"';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['order_number' => $orderNumber]);
+}
+
+
+// customer update information
+function updateUserInfo($userId, $email, $firstname, $lastname, $phone, $address, $postcode, $city, $state) {
+    global $pdo;
+
+    try {
+        // check for duplicate email
+        $sql = 'SELECT COUNT(*) FROM personal_info WHERE user_email = :email AND user_id != :user_id';
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['email' => $email, 'user_id' => $userId]);
+        if ($stmt->fetchColumn() > 0) {
+            return 'duplicate';
+        }
+
+        // update user info
+        $sql = 'UPDATE personal_info
+                SET user_email = :email, firstname = :firstname, lastname = :lastname, user_phone = :phone,
+                    user_address = :address, postcode = :postcode, city = :city, state = :state
+                WHERE user_id = :user_id';
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            'email' => $email,
+            'firstname' => $firstname,
+            'lastname' => $lastname,
+            'phone' => $phone,
+            'address' => $address,
+            'postcode' => $postcode,
+            'city' => $city,
+            'state' => $state,
+            'user_id' => $userId
+        ]);
+
+        return $stmt->rowCount() > 0 ? true : false;
+    } catch (PDOException $e) {
+        if ($e->getCode() == 23000) {
+            return 'duplicate';
+        } else {
+            error_log("Error: " . $e->getMessage());
+            return false;
+        }
+    }
+}
+
+
+
 
 
