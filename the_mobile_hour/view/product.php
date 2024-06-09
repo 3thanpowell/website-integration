@@ -6,15 +6,17 @@ $product_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 if ($product_id > 0) {
     $product = getProductById($product_id);
     if ($product === false) {
-        // Handle the case where the product does not exist
+        // no product
         echo "Product not found.";
         exit;
     }
 } else {
-    // Handle the case where the ID is invalid
+    // bouncer
     echo "Invalid product ID.";
     exit;
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -51,9 +53,13 @@ if ($product_id > 0) {
                         $<?php echo htmlspecialchars($product['price']); ?>
                     </h2>
 
-                    <a href="#" class="btn btn-danger btn-lg mt-5">
-                        Order Now
-                    </a>
+                    <form method="POST" action="../controller/order_process.php">
+                        <input type="hidden" name="order_product_id" value="<?php echo $product_id; ?>">
+
+                        <input type="hidden" name="price" value="<?php echo htmlspecialchars($product['price']); ?>">
+
+                        <button type="submit" class="btn btn-danger btn-lg mt-5">Place Order</button>
+                    </form>
 
                     <h3 class="mt-4">Key Features</h3>
                     <p>
