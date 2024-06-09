@@ -72,10 +72,10 @@ if ($product_id > 0) {
                         <?php echo htmlspecialchars($product['manufacturer']); ?>
                     </p>
 
-                    <p>
-                        <span>
-                            <?php echo htmlspecialchars($product['description']); ?>
-                        </span>
+                    <p class="lead">
+                    
+                        <?php echo htmlspecialchars($product['description']); ?>
+                        
                     </p>
                 </div>
             </div>
