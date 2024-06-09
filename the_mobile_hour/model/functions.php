@@ -227,7 +227,7 @@ function getRecentOrders($customerId) {
 // get all orders by customer_id - no limit
 function getAllOrders($customerId) {
     global $pdo;
-    $sql = 'SELECT o.order_number, o.order_date, o.order_status, o.order_delivery_date, p.product_name, i.image_url
+    $sql = 'SELECT o.order_number, o.order_date, o.order_status, o.order_delivery_date, p.product_name, i.image_url, p.product_id
             FROM `order` o
             JOIN order_detail od ON o.order_number = od.order_number
             JOIN product p ON od.product_id = p.product_id
