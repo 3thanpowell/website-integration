@@ -58,10 +58,18 @@ $orders = getAllOrders($customerId);
                           <tr>
                               <th scope="row"><?php echo htmlspecialchars($order['order_number']); ?></td>
                               <td><img src="../<?php echo htmlspecialchars($order['image_url']); ?>" alt="Product Image" width="50"></td>
-                              <td><?php echo htmlspecialchars($order['product_name']); ?></td>
+                              <td>
+                                <a href="product.php?id=<?php echo htmlspecialchars($order['product_id']); ?>">
+
+                                  <?php echo htmlspecialchars($order['product_name']); ?>
+
+                                </a>
+                              
+                              </td>
                               <td><?php echo htmlspecialchars($order['order_date']); ?></th>
 
                               <td>
+                                
                                 <!-- colour coded status -->
                                 <?php
                                   $status = htmlspecialchars($order['order_status']);
@@ -69,22 +77,22 @@ $orders = getAllOrders($customerId);
 
                                   switch ($status) {
                                       case 'Processing':
-                                          $statusColor = 'text-primary'; // yellow
+                                          $statusColor = 'text-dark'; 
                                           break;
                                       case 'Packed':
-                                          $statusColor = 'text-warning'; // blue
+                                          $statusColor = 'text-warning'; 
                                           break;
                                       case 'Shipped':
-                                          $statusColor = 'text-info'; // light blue
+                                          $statusColor = 'text-info'; 
                                           break;
                                       case 'Delivered':
-                                          $statusColor = 'text-success'; // green
+                                          $statusColor = 'text-success';
                                           break;
                                       case 'Cancelled':
-                                          $statusColor = 'text-danger'; // red
+                                          $statusColor = 'text-danger';
                                           break;
                                       default:
-                                          $statusColor = 'text-secondary'; // gray
+                                          $statusColor = 'text-secondary';
                                           break;
                                     } 
                                   ?>
