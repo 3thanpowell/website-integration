@@ -26,23 +26,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['customer_id'] = $user['customer_id'];
 
         // redirect based on role
-        if ($user['user_role'] === 'admin') {
+        if ($user['user_role'] === 'admin' || $user['user_role'] === 'manager') {
 
-            header('Location: ../view/admin_dashboard.php');
+            header('Location: ../view/staff_dashboard.php');
 
-        } elseif ($user['user_role'] === 'manager') {
+        } else { 
 
-            header('Location: ../view/manager_dashboard.php');
-
-        } else {
-
-            header('Location: ../view/dashboard.php');
-
+            header('Location: ../view/dashboard.php'); 
         }
         exit();
     } else {
         // handle login failure
-        header('Location: login.php?error=invalid_credentials');
+        header('Location: ../view/login.php?error=invalid_credentials');
         exit();
     }
 }
