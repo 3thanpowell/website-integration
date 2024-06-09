@@ -48,13 +48,13 @@ $recentOrders = getRecentOrders($customerId);
                         </h3>
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link active h6" href="#">
+                                <a class="nav-link active h6" href="edit_info.php">
                                     Update Account Information
                                 </a>
                                 <hr>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link h6" href="#">
+                                <a class="nav-link h6" href="order_history.php">
                                     Manage Orders
                                 </a>
                                 <hr>
@@ -107,10 +107,11 @@ $recentOrders = getRecentOrders($customerId);
                                         </div>
                                     </div>
                                 </li>
+
                                 <?php endforeach; ?>
                             </ul>
                         <?php else: ?>
-                            <p>No orders yet..</p>
+                            <p class="h4">No orders yet..</p>
                         <?php endif; ?>
                     </div>
                 </div>
