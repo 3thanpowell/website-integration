@@ -9,7 +9,6 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] != 'customer') {
 }
 
 $firstname = $_SESSION['firstname'];
-$user_role = $_SESSION['user_role']; //this is not needed, delete along with the calls to $user_role later
 ?>
 
 <!DOCTYPE html>
@@ -28,31 +27,25 @@ $user_role = $_SESSION['user_role']; //this is not needed, delete along with the
     <?php include 'navbar.php'; ?>
 
 
+
     <div class="container">
         <h2>Welcome, <?php echo htmlspecialchars($firstname); ?></h2>
-
-        <?php if ($user_role == 'admin'): ?>
-            <h3>Admin Dashboard</h3>
-            <p>Admin-specific content goes here.</p>
-            <!-- Admin functionalities -->
-
-        <?php elseif ($user_role == 'manager'): ?>
-            <h3>Manager Dashboard</h3>
-            <p>Manager-specific content goes here.</p>
-            <!-- Manager functionalities -->
-
-        <?php else: ?>
+        
             <h3>Customer Dashboard</h3>
             <p>Customer-specific content goes here.</p>
-            <!-- Customer functionalities -->
-
-        <?php endif; ?>
 
         <a href="../controller/logout.php" class="btn btn-primary">Logout</a>
     </div>
-    <script src="path/to/bootstrap.js"></script>
+
+
 
     <!-- footer -->
     <?php include 'footer.php'; ?>
+
+    <!-- bootstrap js -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
 </body>
 </html>
