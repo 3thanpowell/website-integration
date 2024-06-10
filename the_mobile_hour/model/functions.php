@@ -46,7 +46,7 @@ function registerUser($email, $password, $firstname, $lastname, $phone, $address
     // rollback transaction if error
     $pdo->rollBack();
 
-    // check for duplicate email
+    // check for duplicate email - 23000 sql code for integrity violation
     if ($e->getCode() == 23000) {
       return 'duplicate';
     } else {
@@ -358,35 +358,25 @@ function getUserById($user_id)
 
 
 // update user 
-function updateUser($user_id, $email, $firstname, $lastname, $phone, $address, $postcode, $city, $state, $role)
+function updateUser($user_id, $email, $firstname, $lastname, $phone, $address, $postcode, $city, $state)
 {
   global $pdo;
+
   try {
     $pdo->beginTransaction();
 
     $sql1 = 'UPDATE personal_info SET user_email = :email, firstname = :firstname, lastname = :lastname, user_phone = :phone, user_address = :address, postcode = :postcode, city = :city, state = :state WHERE user_id = :user_id';
-
     $stmt1 = $pdo->prepare($sql1);
-
-    $stmt1->execute([
-      'email' => $email,
-      'firstname' => $firstname,
-      'lastname' => $lastname,
-      'phone' => $phone,
-      'address' => $address,
-      'postcode' => $postcode,
-      'city' => $city, 'state' => $state,
-      'user_id' => $user_id
-    ]);
-
-    $sql2 = 'UPDATE user SET user_role = :role WHERE user_id = :user_id';
-    $stmt2 = $pdo->prepare($sql2);
-    $stmt2->execute(['role' => $role, 'user_id' => $user_id]);
+    $stmt1->execute(['email' => $email, 'firstname' => $firstname, 'lastname' => $lastname, 'phone' => $phone, 'address' => $address, 'postcode' => $postcode, 'city' => $city, 'state' => $state, 'user_id' => $user_id]);
 
     $pdo->commit();
     return true;
-  } catch (Exception $e) {
+  } catch (PDOException $e) {
     $pdo->rollBack();
-    return false;
+    if ($e->getCode() == 23000) {
+      return 'duplicate';
+    } else {
+      return false;
+    }
   }
 }
