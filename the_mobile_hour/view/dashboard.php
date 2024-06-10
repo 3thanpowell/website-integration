@@ -44,7 +44,7 @@ $recentOrders = getRecentOrders($customerId);
                     <!-- sidebar -->
                     <div class="col-md-3 col-lg-2 sidebar border-right">
                         <h3 class="my-4">Welcome, 
-                            <?php echo htmlspecialchars($firstname);?>
+                            <?php echo ucfirst(htmlspecialchars($firstname));?>
                         </h3>
                         <ul class="nav flex-column">
                             <li class="nav-item">
