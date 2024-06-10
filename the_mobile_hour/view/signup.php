@@ -1,10 +1,10 @@
 <?php
 require_once '../model/functions.php';
 
-// error message to be displayed on error
+// message to be displayed on error
 $errorMessage = '';
 
-// empty variables to be left filled in on error 
+// empty variables to be left filled in on error refresh
 $firstname = '';
 $lastname = '';
 $email = '';
