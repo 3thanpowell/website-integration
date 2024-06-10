@@ -1,0 +1,32 @@
+
+
+/* index */
+
+/* carousel media query sizing on smaller screens*/
+@media (max-width: 470px) {
+  .carousel-item img {
+  height: 300px;
+  width:100vw;
+  object-fit: contain;
+
+  }
+}
+
+
+/* staff_dashboard */
+
+/* transition and card height*/
+.bubble .card {
+  height: 150px;
+  transition: transform 0.1s ease, box-shadow 0.1s ease; 
+}
+
+/* hover effect on manager/admin dash anchors */
+.bubble:hover .card {
+  transform: scale(1.03); 
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5); 
+  background-color: #1a1a1a; 
+}
+
+
+
