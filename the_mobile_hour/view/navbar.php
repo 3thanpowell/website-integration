@@ -55,29 +55,17 @@ $userRole = $isLoggedIn ? $_SESSION['user_role'] : '';
         <?php if ($isLoggedIn): ?>
 
           <!-- if logged in, check which type -->
-          <?php if ($userRole === 'admin'): ?>
+          <?php if ($userRole === 'admin' || $userRole === 'manager'): ?>
 
-            <a class="nav-link" href="admin_dashboard.php">
+            <a class="nav-link" href="staff_dashboard.php">
 
               <!-- myacc svg - person (fill) -->
               <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
                 <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
               </svg> 
        
-              <?php echo htmlspecialchars($_SESSION['firstname']); ?>
+              <?php echo ucfirst(htmlspecialchars($_SESSION['firstname'])); ?>
             </a>
-
-          <?php elseif ($userRole === 'manager'): ?>
-
-            <a class="nav-link" href="manager_dashboard.php">
-
-              <!-- myacc svg - person (fill) -->
-              <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
-                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
-              </svg> 
-       
-              <?php echo htmlspecialchars($_SESSION['firstname']); ?>
-            </a> 
           
           <?php else: ?>
             
@@ -88,7 +76,7 @@ $userRole = $isLoggedIn ? $_SESSION['user_role'] : '';
                 <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
               </svg> 
        
-              <?php echo htmlspecialchars($_SESSION['firstname']); ?>  
+              <?php echo ucfirst(htmlspecialchars($_SESSION['firstname'])); ?>  
             </a>
           
           <?php endif; ?>
