@@ -63,17 +63,9 @@ $users = ($_SESSION['user_role'] == 'manager') ? getAllUsers() : getCustomers();
 
             <td><?php echo htmlspecialchars($user['lastname']); ?></td>
 
-            <td>
+            <td class="text-center">
 
-              <a href="edit_user.php?id=<?php echo $user['user_id']; ?>" class="btn btn-warning btn-sm">Edit</a>
-
-              <a href="delete_user.php?id=<?php echo $user['user_id']; ?>" class="btn btn-danger btn-sm">Delete</a>
-
-              <?php if ($_SESSION['user_role'] == 'manager' && $user['user_role'] == 'customer') : ?>
-
-                <a href="promote_user.php?id=<?php echo $user['user_id']; ?>" class="btn btn-info btn-sm">Set Admin</a>
-
-              <?php endif; ?>
+              <a href="edit_user.php?id=<?php echo $user['user_id']; ?>" class="btn btn-warning ">Edit</a>
 
             </td>
 
