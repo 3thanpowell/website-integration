@@ -295,3 +295,89 @@ function updateUserInfo($userId, $email, $firstname, $lastname, $phone, $address
 
 
 
+
+// admin/manager functions
+
+// gets all users
+function getAllUsers() {
+    global $pdo;
+    $sql = 'SELECT u.user_id, u.user_role, p.user_email, p.firstname, p.lastname
+            FROM user u
+            JOIN personal_info p ON u.user_id = p.user_id';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll();
+}
+
+// promote customer to admin
+function promoteUserToAdmin($user_id) {
+    global $pdo;
+    $sql = 'UPDATE user SET user_role = "admin" WHERE user_id = :user_id';
+    $stmt = $pdo->prepare($sql);
+    return $stmt->execute(['user_id' => $user_id]);
+}
+
+// gets all customers
+function getCustomers() {
+    global $pdo;
+    $sql = 'SELECT u.user_id, u.user_role, p.user_email, p.firstname, p.lastname
+            FROM user u
+            JOIN personal_info p ON u.user_id = p.user_id
+            WHERE u.user_role = "customer"';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll();
+}
+
+// gets user by id
+function getUserById($user_id) {
+    global $pdo;
+    $sql = 'SELECT u.user_id, u.user_role, p.user_email, p.firstname, p.lastname, p.user_phone, p.user_address, p.postcode, p.city, p.state
+            FROM user u
+            JOIN personal_info p ON u.user_id = p.user_id
+            WHERE u.user_id = :user_id';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['user_id' => $user_id]);
+    return $stmt->fetch();
+}
+
+
+// update user 
+function updateUser($user_id, $email, $firstname, $lastname, $phone, $address, $postcode, $city, $state, $role) {
+    global $pdo;
+    try {
+        $pdo->beginTransaction();
+
+        $sql1 = 'UPDATE personal_info SET user_email = :email, firstname = :firstname, lastname = :lastname, user_phone = :phone, user_address = :address, postcode = :postcode, city = :city, state = :state WHERE user_id = :user_id';
+
+        $stmt1 = $pdo->prepare($sql1);
+
+        $stmt1->execute(['email' => $email, 
+        'firstname' => $firstname, 
+        'lastname' => $lastname, 
+        'phone' => $phone, 
+        'address' => $address, 
+        'postcode' => $postcode, 
+        'city' => $city, 'state' => $state, 
+        'user_id' => $user_id]);
+
+        $sql2 = 'UPDATE user SET user_role = :role WHERE user_id = :user_id';
+        $stmt2 = $pdo->prepare($sql2);
+        $stmt2->execute(['role' => $role, 'user_id' => $user_id]);
+
+        $pdo->commit();
+        return true;
+    } catch (Exception $e) {
+        $pdo->rollBack();
+        return false;
+    }
+}
+
+
+
+
+
+
+
+
+

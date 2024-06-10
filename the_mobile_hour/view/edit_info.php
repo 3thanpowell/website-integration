@@ -3,46 +3,47 @@ session_start();
 
 // kicks user if not logged in or not a customer
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] != 'customer') {
-    header('Location: login.php');
-    exit();
+  header('Location: login.php');
+  exit();
 }
 
 require_once '../model/functions.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $email = trim($_POST['email']);
-    $firstname = trim($_POST['firstname']);
-    $lastname = trim($_POST['lastname']);
-    $phone = trim($_POST['phone']);
-    $address = trim($_POST['address']);
-    $postcode = trim($_POST['postcode']);
-    $city = trim($_POST['city']);
-    $state = trim($_POST['state']);
+  $email = trim($_POST['email']);
+  $firstname = trim($_POST['firstname']);
+  $lastname = trim($_POST['lastname']);
+  $phone = trim($_POST['phone']);
+  $address = trim($_POST['address']);
+  $postcode = trim($_POST['postcode']);
+  $city = trim($_POST['city']);
+  $state = trim($_POST['state']);
 
-    $result = updateUserInfo($_SESSION['user_id'], $email, $firstname, $lastname, $phone, $address, $postcode, $city, $state);
+  $result = updateUserInfo($_SESSION['user_id'], $email, $firstname, $lastname, $phone, $address, $postcode, $city, $state);
 
-    if ($result === 'duplicate') {
-        $errorMessage = "The email address is already registered to another account.";
-    } elseif ($result === true) {
-        // Update session data
-        $_SESSION['user_email'] = $email;
-        $_SESSION['firstname'] = $firstname;
-        $_SESSION['lastname'] = $lastname;
-        $_SESSION['user_phone'] = $phone;
-        $_SESSION['user_address'] = $address;
-        $_SESSION['postcode'] = $postcode;
-        $_SESSION['city'] = $city;
-        $_SESSION['state'] = $state;
+  if ($result === 'duplicate') {
+    $errorMessage = "The email address is already registered to another account.";
+  } elseif ($result === true) {
+    // Update session data
+    $_SESSION['user_email'] = $email;
+    $_SESSION['firstname'] = $firstname;
+    $_SESSION['lastname'] = $lastname;
+    $_SESSION['user_phone'] = $phone;
+    $_SESSION['user_address'] = $address;
+    $_SESSION['postcode'] = $postcode;
+    $_SESSION['city'] = $city;
+    $_SESSION['state'] = $state;
 
-        $successMessage = "Information updated successfully.";
-    } else {
-        $errorMessage = "Failed to update information.";
-    }
+    $successMessage = "Information updated successfully.";
+  } else {
+    $errorMessage = "Failed to update information.";
+  }
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,6 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 </head>
+
 <body>
 
   <!-- navbar -->
@@ -60,16 +62,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
   <main>
-    
+
     <div class="container">
       <h1 class="display-4 m-4">Edit Information</h1>
     </div>
 
     <div class="container mt-5 p-5 border border-secondary rounded">
-    
-      <?php if (isset($successMessage)): ?>
+
+      <?php if (isset($successMessage)) : ?>
         <div class="alert alert-success"><?php echo $successMessage; ?></div>
-      <?php elseif (isset($errorMessage)): ?>
+      <?php elseif (isset($errorMessage)) : ?>
         <div class="alert alert-danger"><?php echo $errorMessage; ?></div>
       <?php endif; ?>
 
@@ -90,12 +92,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           <div class="form-group col-md-6">
             <label for="lastname">Last Name</label>
             <input type="text" class="form-control" id="lastname" name="lastname" value="<?php echo htmlspecialchars($_SESSION['lastname']); ?>" required>
-          </div>  
+          </div>
         </div>
 
         <div class="form-group">
           <label for="phone">Phone</label>
-            <input type="tel" class="form-control" id="phone" name="phone" pattern='^(?:\+?61|0)[2-478](?:[ \-]?[0-9]){8}$' title="Please enter a valid Australian phone number" value="<?php echo htmlspecialchars($_SESSION['user_phone']); ?>" required>
+          <input type="tel" class="form-control" id="phone" name="phone" pattern='^(?:\+?61|0)[2-478](?:[ \-]?[0-9]){8}$' title="Please enter a valid Australian phone number" value="<?php echo htmlspecialchars($_SESSION['user_phone']); ?>" required>
         </div>
 
         <div class="form-group">
@@ -133,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <button type="reset" class="btn btn-secondary">Cancel Changes</button>
       </form>
 
-    </div>  
+    </div>
 
   </main>
 
@@ -149,4 +151,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 </body>
+
 </html>

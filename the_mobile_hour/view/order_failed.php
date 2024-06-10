@@ -1,14 +1,15 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
-    exit();
+  header('Location: login.php');
+  exit();
 }
 ?>
 
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,6 +20,7 @@ if (!isset($_SESSION['user_id'])) {
 
 
 </head>
+
 <body>
 
   <!-- navbar -->
@@ -27,7 +29,7 @@ if (!isset($_SESSION['user_id'])) {
 
 
   <main class="container">
-    
+
     <h1 class="display-4">Order Failed</h1>
     <hr>
 
@@ -48,24 +50,24 @@ if (!isset($_SESSION['user_id'])) {
       <div class="col-12">
         <a href="products.php">
 
-         <p> 
+          <p>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-left" viewBox="0 0 16 16">
-              <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223"/>
-            </svg> 
-            
+              <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223" />
+            </svg>
+
             Continue Shopping
           </p>
 
-        
+
         </a>
       </div>
 
-      
+
 
 
     </div>
   </main>
-  
+
 
 
 
@@ -82,4 +84,5 @@ if (!isset($_SESSION['user_id'])) {
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
 </body>
+
 </html
