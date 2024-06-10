@@ -29,10 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($user['user_role'] === 'admin' || $user['user_role'] === 'manager') {
 
             header('Location: ../view/staff_dashboard.php');
+        } else {
 
-        } else { 
-
-            header('Location: ../view/dashboard.php'); 
+            header('Location: ../view/dashboard.php');
         }
         exit();
     } else {

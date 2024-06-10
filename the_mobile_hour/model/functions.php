@@ -4,7 +4,8 @@
 require_once 'db.php';
 
 // register a user
-function registerUser($email, $password, $firstname, $lastname, $phone, $address, $postcode, $city, $state) {
+function registerUser($email, $password, $firstname, $lastname, $phone, $address, $postcode, $city, $state)
+{
     global $pdo;
     try {
         // start transaction
@@ -18,7 +19,7 @@ function registerUser($email, $password, $firstname, $lastname, $phone, $address
             'role' => 'customer',
             'password' => $hashed_password
         ]);
-        
+
         // get last inserted user_id
         $user_id = $pdo->lastInsertId();
 
@@ -57,104 +58,109 @@ function registerUser($email, $password, $firstname, $lastname, $phone, $address
 
 
 //user-login verification and grabs info
-function validateUser($email, $password) {
-  global $pdo;
-  
-  $sql = 'SELECT u.user_id, u.user_role, p.user_email, u.user_password, p.firstname, p.lastname, p.user_phone, p.user_email, p.user_address, p.postcode, p.city, p.state, p.customer_id
+function validateUser($email, $password)
+{
+    global $pdo;
+
+    $sql = 'SELECT u.user_id, u.user_role, p.user_email, u.user_password, p.firstname, p.lastname, p.user_phone, p.user_email, p.user_address, p.postcode, p.city, p.state, p.customer_id
           FROM user u
           JOIN personal_info p ON u.user_id = p.user_id
           WHERE p.user_email = :email';
 
-  $stmt = $pdo->prepare($sql);
-  $stmt->execute(['email' => $email]);
-  $user = $stmt->fetch();
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['email' => $email]);
+    $user = $stmt->fetch();
 
-  error_log("Fetched User: " . print_r($user, true));
+    error_log("Fetched User: " . print_r($user, true));
 
 
-  if ($user && password_verify($password, $user['user_password'])) {
-    return $user;
-  }
-  return false;
+    if ($user && password_verify($password, $user['user_password'])) {
+        return $user;
+    }
+    return false;
 }
 
 
 // logout destroy session
-function logoutUser() {
-  session_start();
-  session_unset();
-  session_destroy();
-  header('Location: ../view/login.php');
-  exit;
+function logoutUser()
+{
+    session_start();
+    session_unset();
+    session_destroy();
+    header('Location: ../view/login.php');
+    exit;
 }
 
 
 
 // product listing and search/filter
-function getProducts($filters = [], $sort = '', $search = '', $limit = null) {
-  global $pdo;
-  $sql = 'SELECT p.product_id, p.product_name, p.price, i.image_url, p.manufacturer 
+function getProducts($filters = [], $sort = '', $search = '', $limit = null)
+{
+    global $pdo;
+    $sql = 'SELECT p.product_id, p.product_name, p.price, i.image_url, p.manufacturer 
           FROM product p 
           JOIN images i ON p.product_id = i.product_id';
-  $whereClauses = [];
-  $params = [];
+    $whereClauses = [];
+    $params = [];
 
-  if (!empty($filters['brand'])) {
-      $whereClauses[] = 'p.manufacturer = :brand';
-      $params['brand'] = $filters['brand'];
-  }
+    if (!empty($filters['brand'])) {
+        $whereClauses[] = 'p.manufacturer = :brand';
+        $params['brand'] = $filters['brand'];
+    }
 
-  if (!empty($search)) {
-      $whereClauses[] = 'p.product_name LIKE :search';
-      $params['search'] = '%' . $search . '%';
-  }
+    if (!empty($search)) {
+        $whereClauses[] = 'p.product_name LIKE :search';
+        $params['search'] = '%' . $search . '%';
+    }
 
-  if ($whereClauses) {
-      $sql .= ' WHERE ' . implode(' AND ', $whereClauses);
-  }
+    if ($whereClauses) {
+        $sql .= ' WHERE ' . implode(' AND ', $whereClauses);
+    }
 
-  if (!empty($sort)) {
-      if ($sort == 'name_asc') {
-          $sql .= ' ORDER BY p.product_name ASC';
-      } elseif ($sort == 'name_desc') {
-          $sql .= ' ORDER BY p.product_name DESC';
-      } elseif ($sort == 'price_asc') {
-          $sql .= ' ORDER BY p.price ASC';
-      } elseif ($sort == 'price_desc') {
-          $sql .= ' ORDER BY p.price DESC';
-      }
-  }
+    if (!empty($sort)) {
+        if ($sort == 'name_asc') {
+            $sql .= ' ORDER BY p.product_name ASC';
+        } elseif ($sort == 'name_desc') {
+            $sql .= ' ORDER BY p.product_name DESC';
+        } elseif ($sort == 'price_asc') {
+            $sql .= ' ORDER BY p.price ASC';
+        } elseif ($sort == 'price_desc') {
+            $sql .= ' ORDER BY p.price DESC';
+        }
+    }
 
-  if ($limit !== null) {
-      $sql .= ' LIMIT :limit';
-      $stmt = $pdo->prepare($sql);
-      foreach ($params as $key => $value) {
-          $stmt->bindValue(':' . $key, $value);
-      }
-      $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-  } else {
-      $stmt = $pdo->prepare($sql);
-      foreach ($params as $key => $value) {
-          $stmt->bindValue(':' . $key, $value);
-      }
-  }
-  $stmt->execute();
-  return $stmt->fetchAll();
+    if ($limit !== null) {
+        $sql .= ' LIMIT :limit';
+        $stmt = $pdo->prepare($sql);
+        foreach ($params as $key => $value) {
+            $stmt->bindValue(':' . $key, $value);
+        }
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+    } else {
+        $stmt = $pdo->prepare($sql);
+        foreach ($params as $key => $value) {
+            $stmt->bindValue(':' . $key, $value);
+        }
+    }
+    $stmt->execute();
+    return $stmt->fetchAll();
 }
 
 
 
 //returns current list of brands
-function getAllBrands() {
-  global $pdo;
-  $sql = 'SELECT DISTINCT manufacturer FROM product';
-  $stmt = $pdo->query($sql);
-  return $stmt->fetchAll(PDO::FETCH_COLUMN);
+function getAllBrands()
+{
+    global $pdo;
+    $sql = 'SELECT DISTINCT manufacturer FROM product';
+    $stmt = $pdo->query($sql);
+    return $stmt->fetchAll(PDO::FETCH_COLUMN);
 }
 
 
 //returns product details
-function getProductById($product_id) {
+function getProductById($product_id)
+{
     global $pdo;
     $sql = 'SELECT p.product_id, p.product_name, p.price, p.product_model, p.manufacturer, i.image_url, 
             f.weight, f.dimensions, f.OS, f.screensize, f.resolution, 
@@ -170,7 +176,8 @@ function getProductById($product_id) {
 
 
 //place order - !!quantity set to 1, change if implementing bulk ordr
-function placeOrder($customerId, $productId, $priceSold) {
+function placeOrder($customerId, $productId, $priceSold)
+{
     global $pdo;
 
     try {
@@ -208,7 +215,8 @@ function placeOrder($customerId, $productId, $priceSold) {
 
 
 // gets 3 recent orders by customer_id
-function getRecentOrders($customerId) {
+function getRecentOrders($customerId)
+{
     global $pdo;
     $sql = 'SELECT o.order_number, o.order_date, o.order_status, o.order_delivery_date, p.product_name, i.image_url
             FROM `order` o
@@ -225,7 +233,8 @@ function getRecentOrders($customerId) {
 
 
 // get all orders by customer_id - no limit
-function getAllOrders($customerId) {
+function getAllOrders($customerId)
+{
     global $pdo;
     $sql = 'SELECT o.order_number, o.order_date, o.order_status, o.order_delivery_date, p.product_name, i.image_url, p.product_id
             FROM `order` o
@@ -241,7 +250,8 @@ function getAllOrders($customerId) {
 
 
 // cancel order - only if order status is 'Processing'
-function cancelOrder($orderNumber) {
+function cancelOrder($orderNumber)
+{
     global $pdo;
     $sql = 'UPDATE `order` SET order_status = "Cancelled" WHERE order_number = :order_number AND order_status = "Processing"';
     $stmt = $pdo->prepare($sql);
@@ -250,7 +260,8 @@ function cancelOrder($orderNumber) {
 
 
 // customer update information
-function updateUserInfo($userId, $email, $firstname, $lastname, $phone, $address, $postcode, $city, $state) {
+function updateUserInfo($userId, $email, $firstname, $lastname, $phone, $address, $postcode, $city, $state)
+{
     global $pdo;
 
     try {
@@ -299,7 +310,8 @@ function updateUserInfo($userId, $email, $firstname, $lastname, $phone, $address
 // admin/manager functions
 
 // gets all users
-function getAllUsers() {
+function getAllUsers()
+{
     global $pdo;
     $sql = 'SELECT u.user_id, u.user_role, p.user_email, p.firstname, p.lastname
             FROM user u
@@ -310,7 +322,8 @@ function getAllUsers() {
 }
 
 // promote customer to admin
-function promoteUserToAdmin($user_id) {
+function promoteUserToAdmin($user_id)
+{
     global $pdo;
     $sql = 'UPDATE user SET user_role = "admin" WHERE user_id = :user_id';
     $stmt = $pdo->prepare($sql);
@@ -318,7 +331,8 @@ function promoteUserToAdmin($user_id) {
 }
 
 // gets all customers
-function getCustomers() {
+function getCustomers()
+{
     global $pdo;
     $sql = 'SELECT u.user_id, u.user_role, p.user_email, p.firstname, p.lastname
             FROM user u
@@ -330,7 +344,8 @@ function getCustomers() {
 }
 
 // gets user by id
-function getUserById($user_id) {
+function getUserById($user_id)
+{
     global $pdo;
     $sql = 'SELECT u.user_id, u.user_role, p.user_email, p.firstname, p.lastname, p.user_phone, p.user_address, p.postcode, p.city, p.state
             FROM user u
@@ -343,7 +358,8 @@ function getUserById($user_id) {
 
 
 // update user 
-function updateUser($user_id, $email, $firstname, $lastname, $phone, $address, $postcode, $city, $state, $role) {
+function updateUser($user_id, $email, $firstname, $lastname, $phone, $address, $postcode, $city, $state, $role)
+{
     global $pdo;
     try {
         $pdo->beginTransaction();
@@ -352,14 +368,16 @@ function updateUser($user_id, $email, $firstname, $lastname, $phone, $address, $
 
         $stmt1 = $pdo->prepare($sql1);
 
-        $stmt1->execute(['email' => $email, 
-        'firstname' => $firstname, 
-        'lastname' => $lastname, 
-        'phone' => $phone, 
-        'address' => $address, 
-        'postcode' => $postcode, 
-        'city' => $city, 'state' => $state, 
-        'user_id' => $user_id]);
+        $stmt1->execute([
+            'email' => $email,
+            'firstname' => $firstname,
+            'lastname' => $lastname,
+            'phone' => $phone,
+            'address' => $address,
+            'postcode' => $postcode,
+            'city' => $city, 'state' => $state,
+            'user_id' => $user_id
+        ]);
 
         $sql2 = 'UPDATE user SET user_role = :role WHERE user_id = :user_id';
         $stmt2 = $pdo->prepare($sql2);
@@ -372,12 +390,3 @@ function updateUser($user_id, $email, $firstname, $lastname, $phone, $address, $
         return false;
     }
 }
-
-
-
-
-
-
-
-
-
