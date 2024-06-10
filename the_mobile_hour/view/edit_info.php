@@ -24,7 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   if ($result === 'duplicate') {
     $errorMessage = "The email address is already registered to another account.";
   } elseif ($result === true) {
-    // Update session data
+    
+    // update the stored session data
     $_SESSION['user_email'] = $email;
     $_SESSION['firstname'] = $firstname;
     $_SESSION['lastname'] = $lastname;
