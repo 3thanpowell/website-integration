@@ -58,7 +58,7 @@ $user_role = $_SESSION['user_role'];
       <div class="row">
 
         <div class="col-md-4 col-sm-6">
-          <a href="#" class="text-decoration-none bubble">
+          <a href="manage_orders.php" class="text-decoration-none bubble">
             <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
               <div class="card-header">
                 <h5>Orders</h5>
@@ -84,7 +84,7 @@ $user_role = $_SESSION['user_role'];
         </div>
 
         <div class="col-md-4 col-sm-6">
-          <a href="#" class="text-decoration-none bubble">
+          <a href="manage_inventory.php" class="text-decoration-none bubble">
             <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
               <div class="card-header">
                 <h5>Inventory</h5>
@@ -97,7 +97,7 @@ $user_role = $_SESSION['user_role'];
         </div>
 
         <div class="col-md-4 col-sm-6">
-          <a href="#" class="text-decoration-none bubble">
+          <a href="changelog.php" class="text-decoration-none bubble">
             <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
               <div class="card-header">
                 <h5>Changelog</h5>
@@ -110,7 +110,7 @@ $user_role = $_SESSION['user_role'];
         </div>
 
         <div class="col-md-4 col-sm-6">
-          <a href="#" class="text-decoration-none bubble">
+          <a href="manage_products.php" class="text-decoration-none bubble">
             <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
               <div class="card-header">
                 <h5>Products</h5>
