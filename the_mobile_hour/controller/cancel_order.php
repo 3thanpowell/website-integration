@@ -3,7 +3,7 @@ session_start();
 
 // kicks user if not logged in or not a customer
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] != 'customer') {
-  header('Location: login.php');
+  header('Location: ../view/login.php');
   exit();
 }
 
