@@ -309,39 +309,125 @@ function updateUserInfo($userId, $email, $firstname, $lastname, $phone, $address
 
 // admin/manager functions
 
-// gets all users
-function getAllUsers()
+// gets all users + filters/search (manager only)
+function getAllUsers($filters = [], $sort = '', $search = '')
 {
   global $pdo;
   $sql = 'SELECT u.user_id, u.user_role, p.user_email, p.firstname, p.lastname
             FROM user u
             JOIN personal_info p ON u.user_id = p.user_id';
+  $whereClauses = [];
+  $params = [];
+
+  if (!empty($filters['role'])) {
+    $whereClauses[] = 'u.user_role = :role';
+    $params['role'] = $filters['role'];
+  }
+
+  if (!empty($search)) {
+    $whereClauses[] = '(p.user_email LIKE :searchEmail OR p.firstname LIKE :searchFirstname OR p.lastname LIKE :searchLastname)';
+    $params['searchEmail'] = '%' . $search . '%';
+    $params['searchFirstname'] = '%' . $search . '%';
+    $params['searchLastname'] = '%' . $search . '%';
+  }
+
+
+  if ($whereClauses) {
+    $sql .= ' WHERE ' . implode(' AND ', $whereClauses);
+  }
+
+  if (!empty($sort)) {
+    if ($sort == 'name_asc') {
+      $sql .= ' ORDER BY p.firstname ASC, p.lastname ASC';
+    } elseif ($sort == 'name_desc') {
+      $sql .= ' ORDER BY p.firstname DESC, p.lastname DESC';
+    }
+  }
+
   $stmt = $pdo->prepare($sql);
+
+  // Bind parameters
+  if (!empty($params)) {
+    foreach ($params as $key => $value) {
+      $stmt->bindValue(':' . $key, $value);
+    }
+  }
+
   $stmt->execute();
   return $stmt->fetchAll();
 }
 
-// promote customer to admin
+
+
+// promote customer to admin (manager only)
 function promoteUserToAdmin($user_id)
 {
   global $pdo;
-  $sql = 'UPDATE user SET user_role = "admin" WHERE user_id = :user_id';
+  $sql = 'UPDATE user SET user_role = :role WHERE user_id = :user_id';
   $stmt = $pdo->prepare($sql);
-  return $stmt->execute(['user_id' => $user_id]);
+  $stmt->execute(['role' => 'admin', 'user_id' => $user_id]);
 }
 
-// gets all customers
-function getCustomers()
+// demote admin to customer (manager only)
+function demoteUserToCustomer($user_id)
+{
+  global $pdo;
+  try {
+    $sql = 'UPDATE user SET user_role = "customer" WHERE user_id = :user_id';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['user_id' => $user_id]);
+    return true;
+  } catch (PDOException $e) {
+    return false;
+  }
+}
+
+
+// gets all customers + filter and search(admin)
+function getCustomers($filters = [], $sort = '', $search = '')
 {
   global $pdo;
   $sql = 'SELECT u.user_id, u.user_role, p.user_email, p.firstname, p.lastname
             FROM user u
             JOIN personal_info p ON u.user_id = p.user_id
             WHERE u.user_role = "customer"';
+  $whereClauses = [];
+  $params = [];
+
+  if (!empty($search)) {
+    $whereClauses[] = '(p.user_email LIKE :searchEmail OR p.firstname LIKE :searchFirstname OR p.lastname LIKE :searchLastname)';
+    $params['searchEmail'] = '%' . $search . '%';
+    $params['searchFirstname'] = '%' . $search . '%';
+    $params['searchLastname'] = '%' . $search . '%';
+  }
+
+
+  if ($whereClauses) {
+    $sql .= ' AND ' . implode(' AND ', $whereClauses);
+  }
+
+  if (!empty($sort)) {
+    if ($sort == 'name_asc') {
+      $sql .= ' ORDER BY p.firstname ASC, p.lastname ASC';
+    } elseif ($sort == 'name_desc') {
+      $sql .= ' ORDER BY p.firstname DESC, p.lastname DESC';
+    }
+  }
+
   $stmt = $pdo->prepare($sql);
+
+  // Bind parameters
+  if (!empty($params)) {
+    foreach ($params as $key => $value) {
+      $stmt->bindValue(':' . $key, $value);
+    }
+  }
+
   $stmt->execute();
   return $stmt->fetchAll();
 }
+
+
 
 // gets user by id
 function getUserById($user_id)
@@ -378,5 +464,28 @@ function updateUser($user_id, $email, $firstname, $lastname, $phone, $address, $
     } else {
       return false;
     }
+  }
+}
+
+// delete user
+function deleteUser($user_id)
+{
+  global $pdo;
+  try {
+    $pdo->beginTransaction();
+
+    $sql1 = 'DELETE FROM personal_info WHERE user_id = :user_id';
+    $stmt1 = $pdo->prepare($sql1);
+    $stmt1->execute(['user_id' => $user_id]);
+
+    $sql2 = 'DELETE FROM user WHERE user_id = :user_id';
+    $stmt2 = $pdo->prepare($sql2);
+    $stmt2->execute(['user_id' => $user_id]);
+
+    $pdo->commit();
+    return true;
+  } catch (PDOException $e) {
+    $pdo->rollBack();
+    return false;
   }
 }
