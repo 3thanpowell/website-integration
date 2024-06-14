@@ -489,3 +489,183 @@ function deleteUser($user_id)
     return false;
   }
 }
+
+
+// order management
+
+// get all orders with filters/search
+function getUserOrders($filters = [], $search = '')
+{
+  global $pdo;
+  $sql = 'SELECT o.order_number, o.order_date, o.order_status, o.order_delivery_date, o.customer_id, p.user_email
+            FROM `order` o
+            JOIN personal_info p ON o.customer_id = p.customer_id';
+  $whereClauses = [];
+  $params = [];
+
+  if (!empty($filters['status'])) {
+    $whereClauses[] = 'o.order_status = :status';
+    $params['status'] = $filters['status'];
+  }
+
+  if (!empty($search)) {
+    $whereClauses[] = '(p.user_email LIKE :searchEmail OR p.customer_id LIKE :searchCustomerId)';
+    $params['searchEmail'] = '%' . $search . '%';
+    $params['searchCustomerId'] = '%' . $search . '%';
+  }
+
+  if ($whereClauses) {
+    $sql .= ' WHERE ' . implode(' AND ', $whereClauses);
+  }
+
+  $sql .= ' ORDER BY o.order_date DESC';
+
+  $stmt = $pdo->prepare($sql);
+  foreach ($params as $key => $value) {
+    $stmt->bindValue(':' . $key, $value);
+  }
+  $stmt->execute();
+  return $stmt->fetchAll();
+}
+
+// update order status
+function updateOrderStatus($orderNumber, $status)
+{
+  global $pdo;
+  $sql = 'UPDATE `order` SET order_status = :status, order_delivery_date = :deliveryDate WHERE order_number = :orderNumber';
+  $stmt = $pdo->prepare($sql);
+  $deliveryDate = ($status == 'Delivered') ? date('Y-m-d H:i:s') : null;
+  $stmt->bindParam(':status', $status);
+  $stmt->bindParam(':deliveryDate', $deliveryDate);
+  $stmt->bindParam(':orderNumber', $orderNumber);
+  return $stmt->execute();
+}
+
+
+// product management
+
+// inventory - manage stock on hand
+function getProductsForInventory($search = '')
+{
+  global $pdo;
+  $sql = 'SELECT product_id, product_name, manufacturer, stock_on_hand FROM product';
+
+  if (!empty($search)) {
+    $sql .= ' WHERE product_id LIKE :searchID OR product_name LIKE :searchName OR manufacturer LIKE :searchManufacturer';
+  }
+
+  $stmt = $pdo->prepare($sql);
+
+  if (!empty($search)) {
+    $stmt->bindValue(':searchID', '%' . $search . '%');
+    $stmt->bindValue(':searchName', '%' . $search . '%');
+    $stmt->bindValue(':searchManufacturer', '%' . $search . '%');
+  }
+
+  $stmt->execute();
+  return $stmt->fetchAll();
+}
+
+
+
+
+// update to on hand amount
+function updateStock($product_id, $amount, $action)
+{
+  global $pdo;
+  try {
+    $pdo->beginTransaction();
+
+    // Get current stock
+    $sql = 'SELECT stock_on_hand FROM product WHERE product_id = :product_id';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['product_id' => $product_id]);
+    $product = $stmt->fetch();
+
+    if ($product) {
+      $current_stock = $product['stock_on_hand'];
+      if ($action == 'add') {
+        $new_stock = $current_stock + $amount;
+      } elseif ($action == 'subtract') {
+        $new_stock = $current_stock - $amount;
+        if ($new_stock < 0) {
+          throw new Exception('Stock cannot be negative');
+        }
+      }
+
+      // Update stock
+      $sql = 'UPDATE product SET stock_on_hand = :new_stock WHERE product_id = :product_id';
+      $stmt = $pdo->prepare($sql);
+      $stmt->execute(['new_stock' => $new_stock, 'product_id' => $product_id]);
+
+      // Insert or update the changelog entry
+      $sql = 'INSERT INTO changelog (product_id, date_last_modified, user_id) 
+                  VALUES (:product_id, NOW(), :user_id) 
+                  ON DUPLICATE KEY UPDATE date_last_modified = NOW(), user_id = VALUES(user_id)';
+      $stmt = $pdo->prepare($sql);
+      $stmt->execute([
+        'product_id' => $product_id,
+        'user_id' => $_SESSION['user_id']
+      ]);
+
+      $pdo->commit();
+      return true;
+    } else {
+      throw new Exception('Product not found');
+    }
+  } catch (Exception $e) {
+    error_log('Error updating stock: ' . $e->getMessage());
+    $pdo->rollBack();
+    return false;
+  }
+}
+
+// changelog
+
+// get changelog entries w filters
+function getChangelogEntries($filters = [])
+{
+  global $pdo;
+
+  $sql = 'SELECT c.changelog_id, c.date_created, c.date_last_modified, c.product_id, p.product_name, c.user_id, u.firstname 
+          FROM changelog c
+          JOIN product p ON c.product_id = p.product_id
+          JOIN personal_info u ON c.user_id = u.user_id';
+
+  $whereClauses = [];
+  $params = [];
+
+  if (!empty($filters['product_id'])) {
+    $whereClauses[] = 'c.product_id = :product_id';
+    $params['product_id'] = $filters['product_id'];
+  }
+
+  if (!empty($filters['start_date'])) {
+    $whereClauses[] = 'c.date_last_modified >= :start_date';
+    $params['start_date'] = date('Y-m-d 00:00:00', strtotime($filters['start_date']));
+  }
+
+  if (!empty($filters['end_date'])) {
+    $whereClauses[] = 'c.date_last_modified <= :end_date';
+    $params['end_date'] = date('Y-m-d 23:59:59', strtotime($filters['end_date']));
+  }
+
+  if (!empty($filters['user_id'])) {
+    $whereClauses[] = 'c.user_id = :user_id';
+    $params['user_id'] = $filters['user_id'];
+  }
+
+  if ($whereClauses) {
+    $sql .= ' WHERE ' . implode(' AND ', $whereClauses);
+  }
+
+  $sql .= ' ORDER BY c.date_last_modified DESC';
+
+  $stmt = $pdo->prepare($sql);
+  foreach ($params as $key => $value) {
+    $stmt->bindValue(':' . $key, $value);
+  }
+
+  $stmt->execute();
+  return $stmt->fetchAll();
+}
