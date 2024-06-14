@@ -71,7 +71,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   <div class="container mt-5 p-5 border border-secondary rounded">
 
-    <!-- error message gets called here -->
+    <!-- output message here -->
+    <?php if (isset($_GET['status'])) : ?>
+      <?php if ($_GET['status'] == 'promoted') : ?>
+        <div class="alert alert-success">User promoted to admin successfully!</div>
+      <?php elseif ($_GET['status'] == 'demoted') : ?>
+        <div class="alert alert-success">User demoted to customer successfully!</div>
+      <?php elseif ($_GET['status'] == 'error') : ?>
+        <div class="alert alert-danger">Failed to promote or demote user. Please try again.</div>
+      <?php endif; ?>
+    <?php endif; ?>
     <?php if ($success) : ?>
       <div class="alert alert-success">User updated successfully!</div>
     <?php endif; ?>
@@ -79,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       <div class="alert alert-danger"><?php echo htmlspecialchars($errorMessage); ?></div>
     <?php endif; ?>
 
-    <form method="POST"  id='editUserForm'>
+    <form method="POST" id='editUserForm'>
 
       <div class="form-group">
         <label for="email">Email</label>
@@ -145,11 +154,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <!-- make admin (only managers) -->
             <?php if ($_SESSION['user_role'] == 'manager' && $user['user_role'] == 'customer') : ?>
-              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmPromoteModal">Make Admin</button>
+              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmPromoteModal">Promote to Admin</button>
+              <!-- make customer (only managers) -->
+            <?php elseif ($_SESSION['user_role'] == 'manager' && $user['user_role'] == 'admin') : ?>
+              <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#confirmDemoteModal">Demote to Customer</button>
             <?php endif; ?>
 
             <!-- send password reset link - does nothing at all -->
-            <button class="btn btn-warning">Send User Password Reset</button>
+            <button class="btn btn-warning">Email Password Reset Link</button>
 
           </div>
         </div>
@@ -162,7 +174,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   </div>
 
-  <!-- Confirmation Modal for Update -->
+  <!-- confirmation Modal for Update -->
   <div class="modal fade" id="confirmUpdateModal" tabindex="-1" role="dialog" aria-labelledby="confirmUpdateModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -183,7 +195,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
   </div>
 
-  <!-- Confirmation Modal for Delete -->
+  <!-- confirmation Modal for Delete -->
   <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -198,13 +210,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <a href="delete_user.php?id=<?php echo $user['user_id']; ?>" class="btn btn-danger">Delete</a>
+          <a href="../controller/delete_user.php?id=<?php echo $user['user_id']; ?>" class="btn btn-danger">Delete</a>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Confirmation Modal for Promote -->
+  <!-- confirmation Modal for Promote -->
   <div class="modal fade" id="confirmPromoteModal" tabindex="-1" role="dialog" aria-labelledby="confirmPromoteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -219,7 +231,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <a href="promote_user.php?id=<?php echo $user['user_id']; ?>" class="btn btn-info">Promote</a>
+          <a href="../controller/promote_user.php?id=<?php echo $user['user_id']; ?>" class="btn btn-info">Promote</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- confirmation Modal for Demote -->
+  <div class="modal fade" id="confirmDemoteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDemoteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmDemoteModalLabel">Confirm Demotion</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to demote this user to customer?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <a href="../controller/demote_user.php?id=<?php echo $user['user_id']; ?>" class="btn btn-warning">Demote</a>
         </div>
       </div>
     </div>
