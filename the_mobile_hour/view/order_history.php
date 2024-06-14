@@ -103,8 +103,11 @@ $orders = getAllOrders($customerId);
                     </span>
 
                   </td>
-
+                  
+                  <!-- order_delivery_date set only once order_status is set to delivered -->
                   <td><?php echo htmlspecialchars($order['order_delivery_date'] ?: 'Not yet delivered'); ?></td>
+
+                  <!-- cancel order button - only if ordeer_status is still set as "Processing" -->
                   <td>
                     <?php if ($order['order_status'] == 'Processing') : ?>
                       <form method="POST" action="../controller/cancel_order.php" style="display:inline;">
