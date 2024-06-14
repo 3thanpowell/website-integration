@@ -67,8 +67,9 @@ $productChunks = array_chunk($products, 4); // Split products into chunks for di
   </header>
 
   <main>
-    <!-- Filter and search form -->
+    <!-- filter and search form -->
     <div class="container mb-4">
+
       <form method="GET" action="products.php">
         <div class="row ml-lg-5">
           <div class="col-md-3 mt-2">
@@ -81,6 +82,7 @@ $productChunks = array_chunk($products, 4); // Split products into chunks for di
               <?php endforeach; ?>
             </select>
           </div>
+
           <div class="col-md-3 mt-2">
             <select name="sort" class="form-control">
               <option value="">Sort By</option>
@@ -90,13 +92,16 @@ $productChunks = array_chunk($products, 4); // Split products into chunks for di
               <option value="price_desc" <?php echo (isset($_GET['sort']) && $_GET['sort'] === 'price_desc') ? 'selected' : ''; ?>>Price High to Low</option>
             </select>
           </div>
+
           <div class="col-md-3 mt-2">
-            <input type="text" name="search" class="form-control" placeholder="Search Products" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+            <input type="text" name="search" class="form-control" placeholder="Search Products..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
           </div>
+
           <div class="col-md-3 col-sm-6 mt-2">
             <button type="submit" class="btn btn-primary">Filter</button>
             <button type="button" class="btn btn-secondary" onclick="window.location.href='products.php';">Reset</button>
           </div>
+
         </div>
       </form>
     </div>
