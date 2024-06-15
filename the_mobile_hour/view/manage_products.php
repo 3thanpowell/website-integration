@@ -36,10 +36,23 @@ $products = getProducts($filters, '', $search);
   <header>
     <!-- navbar -->
     <?php include 'navbar.php'; ?>
+
+    <div class="container">
+      <h1 class="display-4 mb-4">Manage Products</h1>
+
+      <?php if (isset($_GET['status'])) : ?>
+        <?php if ($_GET['status'] == 'deleted') : ?>
+          <div class="alert alert-success">Product deleted successfully!</div>
+        <?php elseif ($_GET['status'] == 'error') : ?>
+          <div class="alert alert-danger">Failed to delete product. Please try again.</div>
+        <?php endif; ?>
+      <?php endif; ?>
+    </div>
+
+
   </header>
 
   <main class="container mt-5">
-    <h1 class="display-4 mb-4">Manage Products</h1>
 
     <!-- Search form -->
     <form method="GET" action="manage_products.php" class="mb-4">
