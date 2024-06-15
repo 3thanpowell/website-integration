@@ -250,6 +250,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
       </div>
 
+      <!-- confirm modal -->
       <div class="modal fade" id="confirmCreateModal" tabindex="-1" role="dialog" aria-labelledby="confirmCreateModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
