@@ -162,7 +162,7 @@ function getAllBrands()
 function getProductById($product_id)
 {
   global $pdo;
-  $sql = 'SELECT p.product_id, p.product_name, p.price, p.product_model, p.manufacturer, i.image_url, 
+  $sql = 'SELECT p.product_id, p.product_name, p.price, p.product_model, p.manufacturer, p.stock_on_hand, i.image_url, 
             f.weight, f.dimensions, f.OS, f.screensize, f.resolution, 
             f.CPU, f.RAM, f.storage, f.battery, f.rear_camera, f.front_camera, f.description
             FROM product p
@@ -598,13 +598,19 @@ function updateStock($product_id, $amount, $action)
       $stmt = $pdo->prepare($sql);
       $stmt->execute(['new_stock' => $new_stock, 'product_id' => $product_id]);
 
-      // Insert or update the changelog entry
-      $sql = 'INSERT INTO changelog (product_id, date_last_modified, user_id) 
-                  VALUES (:product_id, NOW(), :user_id) 
-                  ON DUPLICATE KEY UPDATE date_last_modified = NOW(), user_id = VALUES(user_id)';
+      // Fetch the most recent date_created for the product
+      $sql = 'SELECT date_created FROM changelog WHERE product_id = :product_id ORDER BY date_created DESC LIMIT 1';
+      $stmt = $pdo->prepare($sql);
+      $stmt->execute(['product_id' => $product_id]);
+      $last_date_created = $stmt->fetchColumn();
+
+      // Insert a new changelog entry
+      $sql = 'INSERT INTO changelog (product_id, date_created, date_last_modified, user_id) 
+                    VALUES (:product_id, NOW(), :last_date_created, :user_id)';
       $stmt = $pdo->prepare($sql);
       $stmt->execute([
         'product_id' => $product_id,
+        'last_date_created' => $last_date_created,
         'user_id' => $_SESSION['user_id']
       ]);
 
@@ -620,6 +626,7 @@ function updateStock($product_id, $amount, $action)
   }
 }
 
+
 // changelog
 
 // get changelog entries w filters
@@ -627,7 +634,7 @@ function getChangelogEntries($filters = [])
 {
   global $pdo;
 
-  $sql = 'SELECT c.changelog_id, c.date_created, c.date_last_modified, c.product_id, p.product_name, c.user_id, u.firstname 
+  $sql = 'SELECT c.changelog_id, c.date_created, c.date_last_modified, c.product_id, p.product_name, c.user_id, u.user_email 
           FROM changelog c
           JOIN product p ON c.product_id = p.product_id
           JOIN personal_info u ON c.user_id = u.user_id';
@@ -659,7 +666,7 @@ function getChangelogEntries($filters = [])
     $sql .= ' WHERE ' . implode(' AND ', $whereClauses);
   }
 
-  $sql .= ' ORDER BY c.date_last_modified DESC';
+  $sql .= ' ORDER BY c.date_created DESC';
 
   $stmt = $pdo->prepare($sql);
   foreach ($params as $key => $value) {
@@ -668,4 +675,257 @@ function getChangelogEntries($filters = [])
 
   $stmt->execute();
   return $stmt->fetchAll();
+}
+
+
+// manage products 
+
+// update product details
+function updateProduct($product_id, $product_name, $product_model, $manufacturer, $price, $stock_on_hand, $weight, $dimensions, $os, $screensize, $resolution, $cpu, $ram, $storage, $battery, $rear_camera, $front_camera, $description, $image_url)
+{
+  global $pdo;
+  try {
+    $pdo->beginTransaction();
+
+    // Update the feature table
+    $sql = 'UPDATE feature SET weight = :weight, dimensions = :dimensions, OS = :os, screensize = :screensize, resolution = :resolution, CPU = :cpu, RAM = :ram, storage = :storage, battery = :battery, rear_camera = :rear_camera, front_camera = :front_camera, description = :description 
+                WHERE feature_id = (SELECT feature_id FROM product WHERE product_id = :product_id)';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+      ':weight' => $weight,
+      ':dimensions' => $dimensions,
+      ':os' => $os,
+      ':screensize' => $screensize,
+      ':resolution' => $resolution,
+      ':cpu' => $cpu,
+      ':ram' => $ram,
+      ':storage' => $storage,
+      ':battery' => $battery,
+      ':rear_camera' => $rear_camera,
+      ':front_camera' => $front_camera,
+      ':description' => $description,
+      ':product_id' => $product_id
+    ]);
+
+    // Update the product table
+    $sql = 'UPDATE product SET product_name = :product_name, product_model = :product_model, manufacturer = :manufacturer, price = :price, stock_on_hand = :stock_on_hand WHERE product_id = :product_id';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+      ':product_name' => $product_name,
+      ':product_model' => $product_model,
+      ':manufacturer' => $manufacturer,
+      ':price' => $price,
+      ':stock_on_hand' => $stock_on_hand,
+      ':product_id' => $product_id
+    ]);
+
+    // Update the images table
+    $sql2 = 'UPDATE images SET image_url = :image_url WHERE product_id = :product_id';
+    $stmt2 = $pdo->prepare($sql2);
+    $stmt2->execute([
+      ':image_url' => $image_url,
+      ':product_id' => $product_id
+    ]);
+
+    // Fetch the most recent date_created for the product
+    $sql = 'SELECT date_created FROM changelog WHERE product_id = :product_id ORDER BY date_created DESC LIMIT 1';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':product_id' => $product_id]);
+    $last_date_created = $stmt->fetchColumn();
+
+    // Insert a new changelog entry
+    $sql3 = 'INSERT INTO changelog (date_created, date_last_modified, user_id, product_id) VALUES (NOW(), :last_date_created, :user_id, :product_id)';
+    $stmt3 = $pdo->prepare($sql3);
+    $stmt3->execute([
+      ':last_date_created' => $last_date_created,
+      ':user_id' => $_SESSION['user_id'],
+      ':product_id' => $product_id
+    ]);
+
+    $pdo->commit();
+    return true;
+  } catch (PDOException $e) {
+    $pdo->rollBack();
+    error_log("Error updating product: " . $e->getMessage());
+    return false;
+  }
+}
+
+
+
+
+
+// upload new product image
+function uploadProductImage($product_id, $image_file)
+{
+  global $pdo;
+
+  // Check if the uploaded file is an image
+  $imageFileType = strtolower(pathinfo($image_file["name"], PATHINFO_EXTENSION));
+  $valid_extensions = array("jpg", "jpeg", "png");
+
+  if (!in_array($imageFileType, $valid_extensions)) {
+    return false; // Invalid file type
+  }
+
+  // Fetch the current image URL
+  $sql = 'SELECT image_url FROM images WHERE product_id = :product_id';
+  $stmt = $pdo->prepare($sql);
+  $stmt->execute(['product_id' => $product_id]);
+  $current_image = $stmt->fetchColumn();
+
+  // Handle the image upload
+  $target_dir = "../uploads/";
+  $target_file = $target_dir . basename($image_file["name"]);
+  if (move_uploaded_file($image_file["tmp_name"], $target_file)) {
+    $new_image_url = "uploads/" . basename($image_file["name"]);
+
+    // Update the database with the new image URL
+    $sql = 'UPDATE images SET image_url = :image_url WHERE product_id = :product_id';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+      'image_url' => $new_image_url,
+      'product_id' => $product_id
+    ]);
+
+    // Delete the old image
+    if ($current_image && file_exists("../" . $current_image)) {
+      unlink("../" . $current_image);
+    }
+
+    return $new_image_url;
+  } else {
+    return false;
+  }
+}
+
+
+
+// delete product 
+function deleteProduct($product_id)
+{
+  global $pdo;
+
+  try {
+    $pdo->beginTransaction();
+
+    // Fetch the image URL
+    $sql = 'SELECT image_url FROM images WHERE product_id = :product_id';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['product_id' => $product_id]);
+    $image_url = $stmt->fetchColumn();
+
+    // Delete the associated entries in the changelog table
+    $sql = 'DELETE FROM changelog WHERE product_id = :product_id';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['product_id' => $product_id]);
+
+    // Fetch the feature_id associated with the product
+    $sql = 'SELECT feature_id FROM product WHERE product_id = :product_id';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['product_id' => $product_id]);
+    $feature_id = $stmt->fetchColumn();
+
+    // Delete the associated image from the file system
+    if ($image_url && file_exists("../" . $image_url)) {
+      unlink("../" . $image_url);
+    }
+
+    // Delete the associated image from the database
+    $sql = 'DELETE FROM images WHERE product_id = :product_id';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['product_id' => $product_id]);
+
+    // Delete the product
+    $sql = 'DELETE FROM product WHERE product_id = :product_id';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['product_id' => $product_id]);
+
+    // Delete the associated feature
+    if ($feature_id) {
+      $sql = 'DELETE FROM feature WHERE feature_id = :feature_id';
+      $stmt = $pdo->prepare($sql);
+      $stmt->execute(['feature_id' => $feature_id]);
+    }
+
+    $pdo->commit();
+    return true;
+  } catch (PDOException $e) {
+    $pdo->rollBack();
+    error_log("Error deleting product: " . $e->getMessage());
+    return false;
+  }
+}
+
+
+
+
+// new product
+function createProduct($product_name, $product_model, $manufacturer, $price, $stock_on_hand, $weight, $dimensions, $os, $screensize, $resolution, $cpu, $ram, $storage, $battery, $rear_camera, $front_camera, $description, $image_url)
+{
+  global $pdo;
+
+  try {
+    $pdo->beginTransaction();
+
+    // Insert into the feature table
+    $sql = 'INSERT INTO feature (weight, dimensions, OS, screensize, resolution, CPU, RAM, storage, battery, rear_camera, front_camera, description) 
+                VALUES (:weight, :dimensions, :os, :screensize, :resolution, :cpu, :ram, :storage, :battery, :rear_camera, :front_camera, :description)';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+      'weight' => $weight,
+      'dimensions' => $dimensions,
+      'os' => $os,
+      'screensize' => $screensize,
+      'resolution' => $resolution,
+      'cpu' => $cpu,
+      'ram' => $ram,
+      'storage' => $storage,
+      'battery' => $battery,
+      'rear_camera' => $rear_camera,
+      'front_camera' => $front_camera,
+      'description' => $description
+    ]);
+
+    $feature_id = $pdo->lastInsertId();
+
+    // Insert into the product table
+    $sql = 'INSERT INTO product (product_name, product_model, manufacturer, price, stock_on_hand, feature_id) 
+                VALUES (:product_name, :product_model, :manufacturer, :price, :stock_on_hand, :feature_id)';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+      'product_name' => $product_name,
+      'product_model' => $product_model,
+      'manufacturer' => $manufacturer,
+      'price' => $price,
+      'stock_on_hand' => $stock_on_hand,
+      'feature_id' => $feature_id
+    ]);
+
+    $product_id = $pdo->lastInsertId();
+
+    // Insert into the images table
+    $sql = 'INSERT INTO images (product_id, image_url) VALUES (:product_id, :image_url)';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+      'product_id' => $product_id,
+      'image_url' => $image_url
+    ]);
+
+    // Insert into the changelog table
+    $sql = 'INSERT INTO changelog (product_id, date_created, date_last_modified, user_id) 
+                VALUES (:product_id, NOW(), NOW(), :user_id)';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+      'product_id' => $product_id,
+      'user_id' => $_SESSION['user_id']
+    ]);
+
+    $pdo->commit();
+    return $product_id;
+  } catch (PDOException $e) {
+    $pdo->rollBack();
+    error_log("Error creating product: " . $e->getMessage());
+    return false;
+  }
 }
