@@ -64,6 +64,7 @@ $brands = getAllBrands();
       </div>
     </div>
   </main>
+  
   <!-- footer -->
   <?php include 'footer.php'; ?>
 </body>
