@@ -123,7 +123,7 @@ $user_role = $_SESSION['user_role'];
         </div>
 
         <div class="col-md-4 col-sm-6">
-          <a href="#" class="text-decoration-none bubble">
+          <a href="create_product.php" class="text-decoration-none bubble">
             <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
               <div class="card-header">
                 <h5>New Product</h5>
