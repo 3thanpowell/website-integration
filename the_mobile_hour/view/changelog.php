@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id']) || ($_SESSION['user_role'] != 'admin' && $_SESS
 
 require_once '../model/functions.php';
 
-// Initialize filters
+// filters
 $filters = [];
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   if (!empty($_GET['product_id'])) {
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   }
 }
 
-// Fetch changelog entries
+// get changelog entries
 $changelogEntries = getChangelogEntries($filters);
 ?>
 
@@ -49,88 +49,92 @@ $changelogEntries = getChangelogEntries($filters);
 
     <div class="container mt-5">
       <h1 class="display-4 mb-4">Changelog</h1>
+  </header>
 
-      <!-- Search form -->
-      <form method="GET" action="changelog.php" class="mb-4">
-        <div class="form-row">
-          <div class="form-group col-md-2">
-            <input type="number" id="product_id" name="product_id" class="form-control" placeholder="Product ID" value="<?php echo isset($filters['product_id']) ? htmlspecialchars($filters['product_id']) : ''; ?>">
-          </div>
 
-          <div class="form-group col-md-2">
-            <input type="number" id="user_id" name="user_id" class="form-control" placeholder="User ID" value="<?php echo isset($filters['user_id']) ? htmlspecialchars($filters['user_id']) : ''; ?>">
-          </div>
-
-          <div class="col-md-2">
-            <button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#dateRange" aria-expanded="false" aria-controls="dateRange">
-              Filter Date
-            </button>
-          </div>
-
-          <div class="form-group col-md-2">
-            <button type="submit" class="btn btn-primary">Search</button>
-            <a href="changelog.php" class="btn btn-secondary">Reset</a>
-          </div>
+  <main>
+    <!-- search form -->
+    <form method="GET" action="changelog.php" class="mb-4">
+      <div class="form-row">
+        <div class="form-group col-md-2">
+          <input type="number" id="product_id" name="product_id" class="form-control" placeholder="Product ID" value="<?php echo isset($filters['product_id']) ? htmlspecialchars($filters['product_id']) : ''; ?>">
         </div>
 
+        <div class="form-group col-md-2">
+          <input type="number" id="user_id" name="user_id" class="form-control" placeholder="User ID" value="<?php echo isset($filters['user_id']) ? htmlspecialchars($filters['user_id']) : ''; ?>">
+        </div>
 
-        <!-- collapse for date range -->
-        <div class="collapse" id="dateRange">
-          <div class="card card-body">
-            <div class="row">
-              <div class="form-group col-md-6">
-                <label for="start_date">Start Date:</label>
-                <input type="date" id="start_date" name="start_date" class="form-control" placeholder="Start Date" value="<?php echo isset($filters['start_date']) ? htmlspecialchars($filters['start_date']) : ''; ?>">
-              </div>
+        <div class="col-md-2">
+          <button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#dateRange" aria-expanded="false" aria-controls="dateRange">
+            Filter Date
+          </button>
+        </div>
 
-              <div class="form-group col-md-6">
-                <label for="end_date">End Date:</label>
-                <input type="date" id="end_date" name="end_date" class="form-control" placeholder="End Date" value="<?php echo isset($filters['end_date']) ? htmlspecialchars($filters['end_date']) : ''; ?>">
-              </div>
+        <div class="form-group col-md-2">
+          <button type="submit" class="btn btn-primary">Search</button>
+          <a href="changelog.php" class="btn btn-secondary">Reset</a>
+        </div>
+      </div>
 
-              <div class="form-group col-md-12">
-                <button type="submit" class="btn btn-primary">Search</button>
-                <a href="changelog.php" class="btn btn-secondary">Reset</a>
-              </div>
+
+      <!-- collapse for date range -->
+      <div class="collapse" id="dateRange">
+        <div class="card card-body">
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="start_date">Start Date:</label>
+              <input type="date" id="start_date" name="start_date" class="form-control" placeholder="Start Date" value="<?php echo isset($filters['start_date']) ? htmlspecialchars($filters['start_date']) : ''; ?>">
             </div>
 
+            <div class="form-group col-md-6">
+              <label for="end_date">End Date:</label>
+              <input type="date" id="end_date" name="end_date" class="form-control" placeholder="End Date" value="<?php echo isset($filters['end_date']) ? htmlspecialchars($filters['end_date']) : ''; ?>">
+            </div>
 
+            <div class="form-group col-md-12">
+              <button type="submit" class="btn btn-primary">Search</button>
+              <a href="changelog.php" class="btn btn-secondary">Reset</a>
+            </div>
           </div>
+
+
         </div>
-      </form>
-
-      <!-- Changelog table -->
-      <div class="table-responsive">
-        <table class="table table-striped table-bordered">
-          <thead>
-            <tr>
-              <th scope="col">Changelog ID</th>
-              <th scope="col">Date Created</th>
-              <th scope="col">Date Last Modified</th>
-              <th scope="col">Product ID</th>
-              <th scope="col">Product Name</th>
-              <th scope="col">User ID</th>
-              <th scope="col">First Name</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <?php foreach ($changelogEntries as $entry) : ?>
-              <tr>
-                <th scope="row"><?php echo htmlspecialchars($entry['changelog_id']); ?></th>
-                <td><?php echo htmlspecialchars($entry['date_created']); ?></td>
-                <td><?php echo htmlspecialchars($entry['date_last_modified']); ?></td>
-                <td><?php echo htmlspecialchars($entry['product_id']); ?></td>
-                <td><?php echo htmlspecialchars($entry['product_name']); ?></td>
-                <td><?php echo htmlspecialchars($entry['user_id']); ?></td>
-                <td><?php echo htmlspecialchars($entry['firstname']); ?></td>
-              </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
       </div>
+    </form>
+
+    <!-- changelog table -->
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Changelog ID</th>
+            <th scope="col">Date Created</th>
+            <th scope="col">Date Last Modified</th>
+            <th scope="col">Product ID</th>
+            <th scope="col">Product Name</th>
+            <th scope="col">User ID</th>
+            <th scope="col">User Email</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <?php foreach ($changelogEntries as $entry) : ?>
+            <tr>
+              <th scope="row"><?php echo htmlspecialchars($entry['changelog_id']); ?></th>
+              <td><?php echo htmlspecialchars($entry['date_created']); ?></td>
+              <td><?php echo htmlspecialchars($entry['date_last_modified']); ?></td>
+              <td><?php echo htmlspecialchars($entry['product_id']); ?></td>
+              <td><?php echo htmlspecialchars($entry['product_name']); ?></td>
+              <td><?php echo htmlspecialchars($entry['user_id']); ?></td>
+              <td><?php echo htmlspecialchars($entry['user_email']); ?></td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
     </div>
-  </header>
+    </div>
+  </main>
+
 
   <!-- footer -->
   <?php include 'footer.php'; ?>
