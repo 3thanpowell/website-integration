@@ -1,17 +1,15 @@
 <?php
 
-
 require_once 'db.php';
 
-// register a user
+// all - register user
 function registerUser($email, $password, $firstname, $lastname, $phone, $address, $postcode, $city, $state)
 {
   global $pdo;
   try {
-    // start transaction
     $pdo->beginTransaction();
 
-    // insert into user table
+    // insert - user table
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
     $sql = 'INSERT INTO user (user_role, user_password) VALUES (:role, :password)';
     $stmt = $pdo->prepare($sql);
@@ -23,7 +21,7 @@ function registerUser($email, $password, $firstname, $lastname, $phone, $address
     // get last inserted user_id
     $user_id = $pdo->lastInsertId();
 
-    // insert into personal_info table
+    // insert - personal_info table
     $sql = 'INSERT INTO personal_info (user_id, firstname, lastname, user_phone, user_email, user_address, postcode, city, state) 
                 VALUES (:user_id, :firstname, :lastname, :phone, :email, :address, :postcode, :city, :state)';
     $stmt = $pdo->prepare($sql);
@@ -39,11 +37,9 @@ function registerUser($email, $password, $firstname, $lastname, $phone, $address
       'state' => $state
     ]);
 
-    // Commit transaction
     $pdo->commit();
     return true;
   } catch (PDOException $e) {
-    // rollback transaction if error
     $pdo->rollBack();
 
     // check for duplicate email - 23000 sql code for integrity violation
@@ -57,7 +53,7 @@ function registerUser($email, $password, $firstname, $lastname, $phone, $address
 }
 
 
-//user-login verification and grabs info
+//all - user login validation
 function validateUser($email, $password)
 {
   global $pdo;
@@ -81,7 +77,7 @@ function validateUser($email, $password)
 }
 
 
-// logout destroy session
+// all - logout
 function logoutUser()
 {
   session_start();
@@ -92,8 +88,7 @@ function logoutUser()
 }
 
 
-
-// product listing and search/filter
+// all - product filters and search
 function getProducts($filters = [], $sort = '', $search = '', $limit = null)
 {
   global $pdo;
@@ -147,8 +142,7 @@ function getProducts($filters = [], $sort = '', $search = '', $limit = null)
 }
 
 
-
-//returns current list of brands
+//all - get brands
 function getAllBrands()
 {
   global $pdo;
@@ -158,7 +152,7 @@ function getAllBrands()
 }
 
 
-//returns product details
+//all - get product by id
 function getProductById($product_id)
 {
   global $pdo;
@@ -175,16 +169,15 @@ function getProductById($product_id)
 }
 
 
-//place order - !!quantity set to 1, change if implementing bulk ordr
+//customer - place order (only 1, change on bulk order implementation)
 function placeOrder($customerId, $productId, $priceSold)
 {
   global $pdo;
 
   try {
-    // start transaction
     $pdo->beginTransaction();
 
-    // insert into order table
+    // insert - order table
     $sql = 'INSERT INTO `order` (order_date, customer_id, order_status) VALUES (NOW(), :customer_id, "Processing")';
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['customer_id' => $customerId]);
@@ -192,7 +185,7 @@ function placeOrder($customerId, $productId, $priceSold)
     // last inserted order number
     $orderNumber = $pdo->lastInsertId();
 
-    // insert into order_detail table
+    // insert - order_detail 
     $sql = 'INSERT INTO order_detail (product_id, quantity, price_sold, order_number) VALUES (:product_id, 1, :price_sold, :order_number)';
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
@@ -201,12 +194,11 @@ function placeOrder($customerId, $productId, $priceSold)
       'order_number' => $orderNumber
     ]);
 
-    // commit
+
     $pdo->commit();
 
     return true;
   } catch (Exception $e) {
-    // rolback if error
     $pdo->rollBack();
     error_log("Order failed: " . $e->getMessage());
     return false;
@@ -214,7 +206,7 @@ function placeOrder($customerId, $productId, $priceSold)
 }
 
 
-// gets 3 recent orders by customer_id
+// customer - get 3 recent orders by customer_id
 function getRecentOrders($customerId)
 {
   global $pdo;
@@ -232,7 +224,7 @@ function getRecentOrders($customerId)
 }
 
 
-// get all orders by customer_id - no limit
+// customer - get all orders by customer_id
 function getAllOrders($customerId)
 {
   global $pdo;
@@ -249,7 +241,7 @@ function getAllOrders($customerId)
 }
 
 
-// cancel order - only if order status is 'Processing'
+// customer - cancel order
 function cancelOrder($orderNumber)
 {
   global $pdo;
@@ -259,7 +251,7 @@ function cancelOrder($orderNumber)
 }
 
 
-// customer update information
+// customer - update information
 function updateUserInfo($userId, $email, $firstname, $lastname, $phone, $address, $postcode, $city, $state)
 {
   global $pdo;
@@ -273,7 +265,7 @@ function updateUserInfo($userId, $email, $firstname, $lastname, $phone, $address
       return 'duplicate';
     }
 
-    // update user info
+    // update - user info
     $sql = 'UPDATE personal_info
                 SET user_email = :email, firstname = :firstname, lastname = :lastname, user_phone = :phone,
                     user_address = :address, postcode = :postcode, city = :city, state = :state
@@ -304,12 +296,11 @@ function updateUserInfo($userId, $email, $firstname, $lastname, $phone, $address
 
 
 
+// STAFF - FUNCTIONS
 
+// STAFF - USER MANAGEMENT
 
-
-// admin/manager functions
-
-// gets all users + filters/search (manager only)
+// staff(manager) - get all users
 function getAllUsers($filters = [], $sort = '', $search = '')
 {
   global $pdo;
@@ -346,7 +337,6 @@ function getAllUsers($filters = [], $sort = '', $search = '')
 
   $stmt = $pdo->prepare($sql);
 
-  // Bind parameters
   if (!empty($params)) {
     foreach ($params as $key => $value) {
       $stmt->bindValue(':' . $key, $value);
@@ -358,8 +348,7 @@ function getAllUsers($filters = [], $sort = '', $search = '')
 }
 
 
-
-// promote customer to admin (manager only)
+// staff(manager) - promote customer to admin
 function promoteUserToAdmin($user_id)
 {
   global $pdo;
@@ -383,7 +372,7 @@ function demoteUserToCustomer($user_id)
 }
 
 
-// gets all customers + filter and search(admin)
+// staff(admin) - get only customers
 function getCustomers($filters = [], $sort = '', $search = '')
 {
   global $pdo;
@@ -416,7 +405,6 @@ function getCustomers($filters = [], $sort = '', $search = '')
 
   $stmt = $pdo->prepare($sql);
 
-  // Bind parameters
   if (!empty($params)) {
     foreach ($params as $key => $value) {
       $stmt->bindValue(':' . $key, $value);
@@ -429,7 +417,7 @@ function getCustomers($filters = [], $sort = '', $search = '')
 
 
 
-// gets user by id
+// staff - get user by id
 function getUserById($user_id)
 {
   global $pdo;
@@ -443,7 +431,7 @@ function getUserById($user_id)
 }
 
 
-// update user 
+// update - user 
 function updateUser($user_id, $email, $firstname, $lastname, $phone, $address, $postcode, $city, $state)
 {
   global $pdo;
@@ -467,7 +455,7 @@ function updateUser($user_id, $email, $firstname, $lastname, $phone, $address, $
   }
 }
 
-// delete user
+// delete - user
 function deleteUser($user_id)
 {
   global $pdo;
@@ -491,9 +479,9 @@ function deleteUser($user_id)
 }
 
 
-// order management
+// STAFF - ORDER MANAGEMENT
 
-// get all orders with filters/search
+// staff - get orders
 function getUserOrders($filters = [], $search = '')
 {
   global $pdo;
@@ -528,7 +516,7 @@ function getUserOrders($filters = [], $search = '')
   return $stmt->fetchAll();
 }
 
-// update order status
+// update - order status
 function updateOrderStatus($orderNumber, $status)
 {
   global $pdo;
@@ -541,10 +529,9 @@ function updateOrderStatus($orderNumber, $status)
   return $stmt->execute();
 }
 
+// STAFF - INVENTORY MANAGEMENT
 
-// product management
-
-// inventory - manage stock on hand
+// staff - inventory products
 function getProductsForInventory($search = '')
 {
   global $pdo;
@@ -567,16 +554,14 @@ function getProductsForInventory($search = '')
 }
 
 
-
-
-// update to on hand amount
+// staff - update stock count
 function updateStock($product_id, $amount, $action)
 {
   global $pdo;
   try {
     $pdo->beginTransaction();
 
-    // Get current stock
+    // get current stock
     $sql = 'SELECT stock_on_hand FROM product WHERE product_id = :product_id';
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['product_id' => $product_id]);
@@ -593,18 +578,18 @@ function updateStock($product_id, $amount, $action)
         }
       }
 
-      // Update stock
+      // update - stock
       $sql = 'UPDATE product SET stock_on_hand = :new_stock WHERE product_id = :product_id';
       $stmt = $pdo->prepare($sql);
       $stmt->execute(['new_stock' => $new_stock, 'product_id' => $product_id]);
 
-      // Fetch the most recent date_created for the product
+      // most recent date_created for product
       $sql = 'SELECT date_created FROM changelog WHERE product_id = :product_id ORDER BY date_created DESC LIMIT 1';
       $stmt = $pdo->prepare($sql);
       $stmt->execute(['product_id' => $product_id]);
       $last_date_created = $stmt->fetchColumn();
 
-      // Insert a new changelog entry
+      // insert - changelog entry
       $sql = 'INSERT INTO changelog (product_id, date_created, date_last_modified, user_id) 
                     VALUES (:product_id, NOW(), :last_date_created, :user_id)';
       $stmt = $pdo->prepare($sql);
@@ -627,7 +612,7 @@ function updateStock($product_id, $amount, $action)
 }
 
 
-// changelog
+// STAFF - CHANGELOG
 
 // get changelog entries w filters
 function getChangelogEntries($filters = [])
@@ -678,16 +663,16 @@ function getChangelogEntries($filters = [])
 }
 
 
-// manage products 
+// STAFF - PRODUCT MANAGEMENT 
 
-// update product details
+// staff - update product
 function updateProduct($product_id, $product_name, $product_model, $manufacturer, $price, $stock_on_hand, $weight, $dimensions, $os, $screensize, $resolution, $cpu, $ram, $storage, $battery, $rear_camera, $front_camera, $description, $image_url)
 {
   global $pdo;
   try {
     $pdo->beginTransaction();
 
-    // Update the feature table
+    // update - feature table
     $sql = 'UPDATE feature SET weight = :weight, dimensions = :dimensions, OS = :os, screensize = :screensize, resolution = :resolution, CPU = :cpu, RAM = :ram, storage = :storage, battery = :battery, rear_camera = :rear_camera, front_camera = :front_camera, description = :description 
                 WHERE feature_id = (SELECT feature_id FROM product WHERE product_id = :product_id)';
     $stmt = $pdo->prepare($sql);
@@ -707,7 +692,7 @@ function updateProduct($product_id, $product_name, $product_model, $manufacturer
       ':product_id' => $product_id
     ]);
 
-    // Update the product table
+    // update - product table
     $sql = 'UPDATE product SET product_name = :product_name, product_model = :product_model, manufacturer = :manufacturer, price = :price, stock_on_hand = :stock_on_hand WHERE product_id = :product_id';
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
@@ -719,7 +704,7 @@ function updateProduct($product_id, $product_name, $product_model, $manufacturer
       ':product_id' => $product_id
     ]);
 
-    // Update the images table
+    // update - images table
     $sql2 = 'UPDATE images SET image_url = :image_url WHERE product_id = :product_id';
     $stmt2 = $pdo->prepare($sql2);
     $stmt2->execute([
@@ -727,13 +712,13 @@ function updateProduct($product_id, $product_name, $product_model, $manufacturer
       ':product_id' => $product_id
     ]);
 
-    // Fetch the most recent date_created for the product
+    // get most recent date_created for the product
     $sql = 'SELECT date_created FROM changelog WHERE product_id = :product_id ORDER BY date_created DESC LIMIT 1';
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':product_id' => $product_id]);
     $last_date_created = $stmt->fetchColumn();
 
-    // Insert a new changelog entry
+    // new changelog entry 
     $sql3 = 'INSERT INTO changelog (date_created, date_last_modified, user_id, product_id) VALUES (NOW(), :last_date_created, :user_id, :product_id)';
     $stmt3 = $pdo->prepare($sql3);
     $stmt3->execute([
@@ -752,35 +737,33 @@ function updateProduct($product_id, $product_name, $product_model, $manufacturer
 }
 
 
-
-
-
-// upload new product image
+// staff - upload image
 function uploadProductImage($product_id, $image_file)
 {
   global $pdo;
 
-  // Check if the uploaded file is an image
+  // image check
   $imageFileType = strtolower(pathinfo($image_file["name"], PATHINFO_EXTENSION));
   $valid_extensions = array("jpg", "jpeg", "png");
 
+  // file type validation
   if (!in_array($imageFileType, $valid_extensions)) {
-    return false; // Invalid file type
+    return false;
   }
 
-  // Fetch the current image URL
+  // current image url
   $sql = 'SELECT image_url FROM images WHERE product_id = :product_id';
   $stmt = $pdo->prepare($sql);
   $stmt->execute(['product_id' => $product_id]);
   $current_image = $stmt->fetchColumn();
 
-  // Handle the image upload
+  // upload image
   $target_dir = "../uploads/";
   $target_file = $target_dir . basename($image_file["name"]);
   if (move_uploaded_file($image_file["tmp_name"], $target_file)) {
     $new_image_url = "uploads/" . basename($image_file["name"]);
 
-    // Update the database with the new image URL
+    // update new image url
     $sql = 'UPDATE images SET image_url = :image_url WHERE product_id = :product_id';
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
@@ -788,7 +771,7 @@ function uploadProductImage($product_id, $image_file)
       'product_id' => $product_id
     ]);
 
-    // Delete the old image securely
+    // delete old image securely
     if ($current_image) {
       $current_image_path = realpath("../" . $current_image);
       $uploads_dir = realpath("../uploads/");
@@ -805,9 +788,7 @@ function uploadProductImage($product_id, $image_file)
 }
 
 
-
-
-// delete product 
+// staff - delete product 
 function deleteProduct($product_id)
 {
   global $pdo;
@@ -815,24 +796,24 @@ function deleteProduct($product_id)
   try {
     $pdo->beginTransaction();
 
-    // Fetch the image URL
+    // image URL
     $sql = 'SELECT image_url FROM images WHERE product_id = :product_id';
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['product_id' => $product_id]);
     $image_url = $stmt->fetchColumn();
 
-    // Delete the associated entries in the changelog table
+    // delete changelog entries of product
     $sql = 'DELETE FROM changelog WHERE product_id = :product_id';
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['product_id' => $product_id]);
 
-    // Fetch the feature_id associated with the product
+    // feature_id
     $sql = 'SELECT feature_id FROM product WHERE product_id = :product_id';
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['product_id' => $product_id]);
     $feature_id = $stmt->fetchColumn();
 
-    // Delete the associated image from the file system securely
+    // image
     if ($image_url) {
       $image_path = realpath("../" . $image_url);
       $uploads_dir = realpath("../uploads/");
@@ -842,17 +823,17 @@ function deleteProduct($product_id)
       }
     }
 
-    // Delete the associated image from the database
+    // delete image from the database
     $sql = 'DELETE FROM images WHERE product_id = :product_id';
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['product_id' => $product_id]);
 
-    // Delete the product
+    // delete product
     $sql = 'DELETE FROM product WHERE product_id = :product_id';
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['product_id' => $product_id]);
 
-    // Delete the associated feature
+    // delete feature
     if ($feature_id) {
       $sql = 'DELETE FROM feature WHERE feature_id = :feature_id';
       $stmt = $pdo->prepare($sql);
@@ -869,9 +850,7 @@ function deleteProduct($product_id)
 }
 
 
-
-
-// new product
+// staff - product creation
 function createProduct($product_name, $product_model, $manufacturer, $price, $stock_on_hand, $weight, $dimensions, $os, $screensize, $resolution, $cpu, $ram, $storage, $battery, $rear_camera, $front_camera, $description, $image_url)
 {
   global $pdo;
@@ -879,7 +858,7 @@ function createProduct($product_name, $product_model, $manufacturer, $price, $st
   try {
     $pdo->beginTransaction();
 
-    // Insert into the feature table
+    // insert-feature table
     $sql = 'INSERT INTO feature (weight, dimensions, OS, screensize, resolution, CPU, RAM, storage, battery, rear_camera, front_camera, description) 
                 VALUES (:weight, :dimensions, :os, :screensize, :resolution, :cpu, :ram, :storage, :battery, :rear_camera, :front_camera, :description)';
     $stmt = $pdo->prepare($sql);
@@ -900,7 +879,7 @@ function createProduct($product_name, $product_model, $manufacturer, $price, $st
 
     $feature_id = $pdo->lastInsertId();
 
-    // Insert into the product table
+    // insert-product table
     $sql = 'INSERT INTO product (product_name, product_model, manufacturer, price, stock_on_hand, feature_id) 
                 VALUES (:product_name, :product_model, :manufacturer, :price, :stock_on_hand, :feature_id)';
     $stmt = $pdo->prepare($sql);
@@ -915,7 +894,7 @@ function createProduct($product_name, $product_model, $manufacturer, $price, $st
 
     $product_id = $pdo->lastInsertId();
 
-    // Insert into the images table
+    // insert-images table
     $sql = 'INSERT INTO images (product_id, image_url) VALUES (:product_id, :image_url)';
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
@@ -923,7 +902,7 @@ function createProduct($product_name, $product_model, $manufacturer, $price, $st
       'image_url' => $image_url
     ]);
 
-    // Insert into the changelog table
+    // insert-changelog table
     $sql = 'INSERT INTO changelog (product_id, date_created, date_last_modified, user_id) 
                 VALUES (:product_id, NOW(), NOW(), :user_id)';
     $stmt = $pdo->prepare($sql);

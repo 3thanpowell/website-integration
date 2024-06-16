@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Kicks user if not logged in or not a manager/admin
+// kicks user if not logged in or not a manager/admin
 if (!isset($_SESSION['user_id']) || ($_SESSION['user_role'] != 'admin' && $_SESSION['user_role'] != 'manager')) {
   header('Location: ../view/login.php');
   exit();
