@@ -28,8 +28,8 @@
       <div class="row">
         <div class="col-lg-6 col-sm-12 col-md-12 border rounded bg-light p-5">
 
-          <h3 class="">Registered Customers</h3>
-          <p class="">Sign in using your email</p>
+          <h3>Registered Customers</h3>
+          <p>Sign in using your email</p>
 
           <form class="m-4" action="../controller/login_process.php" method="post">
             <div class="form-group">
@@ -54,13 +54,11 @@
         </div>
 
 
-
-
         <!-- sign up -->
         <div class="col-lg-6 col-sm-12 col-md-12 border rounded bg-light p-5">
 
-          <h3 class="">New Customers</h3>
-          <p class="">Place orders and keep track of them too, by creating an account!</p>
+          <h3>New Customers</h3>
+          <p>Place orders and keep track of them too, by creating an account!</p>
 
 
           <a href="signup.php" class="text-white text-decoration-none btn btn-info btn-lg m-3">Register</a>
@@ -68,8 +66,6 @@
         </div>
       </div>
     </div>
-
-
 
   </main>
 
