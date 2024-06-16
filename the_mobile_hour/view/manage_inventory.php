@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Kicks user if not logged in or not an admin/manager
+// kicks user if not logged in or not an admin/manager
 if (!isset($_SESSION['user_id']) || ($_SESSION['user_role'] != 'admin' && $_SESSION['user_role'] != 'manager')) {
   header('Location: login.php');
   exit();
@@ -9,14 +9,14 @@ if (!isset($_SESSION['user_id']) || ($_SESSION['user_role'] != 'admin' && $_SESS
 
 require_once '../model/functions.php';
 
-// Initialize search variable
+// search variable
 $search = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['search'])) {
   $search = trim($_GET['search']);
 }
 
-// Handle stock update
+// stock update
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $product_id = intval($_POST['product_id']);
   $amount = intval($_POST['amount']);
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   }
 }
 
-// Fetch products for inventory management
+// products for inventory management
 $products = getProductsForInventory($search);
 ?>
 
@@ -42,7 +42,7 @@ $products = getProductsForInventory($search);
   <meta charset="UTF-8">
   <title>Manage Inventory</title>
 
-  <!-- bootstrap cdn link -->
+  <!-- bootstrap CDN link -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 
@@ -53,9 +53,17 @@ $products = getProductsForInventory($search);
     <?php include 'navbar.php'; ?>
 
     <div class="container mt-5">
-      <h1 class="display-4 mb-4">Manage Inventory</h1>
+      <h1 class="display-4 mt-5">Manage Inventory</h1>
+    </div>
 
-      <!-- Update status message -->
+  </header>
+
+  <main>
+
+    <div class="container mt-5">
+
+
+      <!-- output status message -->
       <?php if (isset($status)) : ?>
         <?php if ($status == 'updated') : ?>
           <div class="alert alert-success">Stock updated successfully!</div>
@@ -64,7 +72,7 @@ $products = getProductsForInventory($search);
         <?php endif; ?>
       <?php endif; ?>
 
-      <!-- Search form -->
+      <!-- search form -->
       <form method="GET" action="manage_inventory.php" class="mb-4">
         <div class="form-row">
           <div class="form-group col-md-8">
@@ -77,7 +85,7 @@ $products = getProductsForInventory($search);
         </div>
       </form>
 
-      <!-- Inventory management table -->
+      <!-- inventory management table -->
       <div class="table-responsive">
         <table class="table table-striped table-bordered">
           <thead>
@@ -101,7 +109,7 @@ $products = getProductsForInventory($search);
                 <td><?php echo htmlspecialchars($product['stock_on_hand']); ?></td>
                 <td>
                   <form method="POST" action="manage_inventory.php" class="form-inline">
-                    <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
+                    <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['product_id']); ?>">
                     <input type="number" name="amount" class="form-control mb-2 mr-sm-2" required>
                     <button type="submit" name="action" value="add" class="btn btn-success mb-2">Add</button>
                     <button type="submit" name="action" value="subtract" class="btn btn-danger mb-2">Subtract</button>
@@ -115,7 +123,7 @@ $products = getProductsForInventory($search);
         </table>
       </div>
     </div>
-  </header>
+  </main>
 
   <!-- footer -->
   <?php include 'footer.php'; ?>

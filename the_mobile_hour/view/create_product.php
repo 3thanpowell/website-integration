@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Kicks user if not logged in or not an admin/manager
+// kicks user if not logged in or not an admin/manager
 if (!isset($_SESSION['user_id']) || ($_SESSION['user_role'] != 'admin' && $_SESSION['user_role'] != 'manager')) {
   header('Location: login.php');
   exit();
@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id']) || ($_SESSION['user_role'] != 'admin' && $_SESS
 
 require_once '../model/functions.php';
 
-// Handle form submission
+// form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $product_name = $_POST['product_name'];
   $product_model = $_POST['product_model'];
@@ -29,14 +29,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $front_camera = $_POST['front_camera'];
   $description = $_POST['description'];
 
-  // Handle image upload
+  // image upload
   if (!empty($_FILES['image']['name'])) {
     $image_url = uploadProductImage($product_id, $_FILES['image']);
   } else {
-    $image_url = '../uploads/default.jpg'; 
+    $image_url = '../uploads/default.jpg';
   }
 
-  // Create product
+  // create product
   $product_id = createProduct($product_name, $product_model, $manufacturer, $price, $stock_on_hand, $weight, $dimensions, $os, $screensize, $resolution, $cpu, $ram, $storage, $battery, $rear_camera, $front_camera, $description, $image_url);
 
   if ($product_id) {
@@ -55,24 +55,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <meta charset="UTF-8">
   <title>Create Product</title>
 
-  <!-- bootstrap cdn link -->
+  <!-- bootstrap CDN link -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 
 <body>
 
   <header>
-    <!-- Navbar -->
+    <!-- navbar -->
     <?php include 'navbar.php' ?>
 
-    <div class="container">
+    <div class="container mt-5">
       <h1 class="display-4">New Product</h1>
     </div>
 
   </header>
 
   <main>
-    <div class="container mt-4">
+    <div class="container mt-5">
       <div class="row">
         <div class="col-md-6 mt-2">
           <form method="POST" action="create_product.php" enctype="multipart/form-data" id="createProductForm">
@@ -278,11 +278,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <?php include 'footer.php' ?>
 
   <!-- bootstrap js -->
-  <!-- bootstrap js -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
-
 </body>
 
 </html>

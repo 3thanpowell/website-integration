@@ -6,28 +6,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Mobile Hour</title>
 
-  <!-- Bootstrap CSS CDN link -->
+  <!-- bootstrap CSS CDN link -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
 </head>
 
 <body>
   <header>
-    <!-- nav -->
+    <!-- navbar -->
     <?php include 'navbar.php'; ?>
 
-    <!-- page title -->
-    <div class="container pt-3">
-      <h1 class="display-5 p-5">
-        Login
-      </h1>
+    <div class="container mt-5">
+      <h1 class="display-4">Login</h1>
     </div>
-
   </header>
 
   <main>
-
-
 
     <!-- login -->
     <div class="container">
@@ -66,7 +60,7 @@
         <div class="col-lg-6 col-sm-12 col-md-12 border rounded bg-light p-5">
 
           <h3 class="">New Customers</h3>
-          <p class="">Place your orders and keep track of them too, by creating an account!</p>
+          <p class="">Place orders and keep track of them too, by creating an account!</p>
 
 
           <a href="signup.php" class="text-white text-decoration-none btn btn-info btn-lg m-3">Register</a>
@@ -84,10 +78,10 @@
   <?php include 'footer.php'; ?>
 
 
-  <!-- Bootstrap JS CDN link -->
-  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <!-- bootstrap js -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
 </body>
 
 </html>

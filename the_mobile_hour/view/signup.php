@@ -4,7 +4,7 @@ require_once '../model/functions.php';
 // message to be displayed on error
 $errorMessage = '';
 
-// empty variables to be left filled in on error refresh
+// variables to be left filled in on error refresh
 $firstname = '';
 $lastname = '';
 $email = '';
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   if ($result === true) {
     echo "Registration successful!";
-    // redirect to login page
+    // redirect to login page on succesful registration
     header('Location: login.php');
     exit;
   } elseif ($result === 'duplicate') {
@@ -51,12 +51,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 
 <body>
+
   <header>
+    <!-- navbar -->
     <?php include 'navbar.php'; ?>
-    <div class="container pt-3">
-      <h1 class="display-5 p-5">Create an Account</h1>
+
+    <div class="container mt-5">
+      <h1 class="display-4">Create an Account</h1>
     </div>
   </header>
+
   <main>
     <div class="container">
       <div class="row">
@@ -159,29 +163,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
   </main>
 
+  <!-- footer -->
   <?php include 'footer.php'; ?>
 
+  <!-- signupValidation.js -->
   <script src="../js/signupValidation.js"></script>
-  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
-  <!-- show password toggle -->
-  <script>
-    document.getElementById('togglePassword').addEventListener('click', function(e) {
+  <!-- bootstrap js -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
 
-      const passwordField = document.getElementById('password');
-      const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-      passwordField.setAttribute('type', type);
-    });
-
-    document.getElementById('toggleConfirmPassword').addEventListener('click', function(e) {
-
-      const confirmPasswordField = document.getElementById('confirmPassword');
-      const type = confirmPasswordField.getAttribute('type') === 'password' ? 'text' : 'password';
-      confirmPasswordField.setAttribute('type', type);
-    });
-  </script>
 </body>
 
 </html>

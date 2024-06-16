@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Kicks user if not logged in or not an admin/manager
+// kicks user if not logged in or not an admin/manager
 if (!isset($_SESSION['user_id']) || ($_SESSION['user_role'] != 'admin' && $_SESSION['user_role'] != 'manager')) {
   header('Location: login.php');
   exit();
@@ -9,14 +9,14 @@ if (!isset($_SESSION['user_id']) || ($_SESSION['user_role'] != 'admin' && $_SESS
 
 require_once '../model/functions.php';
 
-// Initialize filters and search
+// filters and search
 $filters = [];
 $search = '';
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && !empty($_GET['search'])) {
   $search = $_GET['search'];
 }
 
-// Fetch products
+// products
 $products = getProducts($filters, '', $search);
 ?>
 
@@ -27,7 +27,7 @@ $products = getProducts($filters, '', $search);
   <meta charset="UTF-8">
   <title>Manage Products</title>
 
-  <!-- bootstrap cdn link -->
+  <!-- bootstrap CDN link -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 
@@ -37,16 +37,8 @@ $products = getProducts($filters, '', $search);
     <!-- navbar -->
     <?php include 'navbar.php'; ?>
 
-    <div class="container">
-      <h1 class="display-4 mb-4">Manage Products</h1>
-
-      <?php if (isset($_GET['status'])) : ?>
-        <?php if ($_GET['status'] == 'deleted') : ?>
-          <div class="alert alert-success">Product deleted successfully!</div>
-        <?php elseif ($_GET['status'] == 'error') : ?>
-          <div class="alert alert-danger">Failed to delete product. Please try again.</div>
-        <?php endif; ?>
-      <?php endif; ?>
+    <div class="container mt-5">
+      <h1 class="display-4">Manage Products</h1>
     </div>
 
 
@@ -54,7 +46,16 @@ $products = getProducts($filters, '', $search);
 
   <main class="container mt-5">
 
-    <!-- Search form -->
+    <!--output display  -->
+    <?php if (isset($_GET['status'])) : ?>
+      <?php if ($_GET['status'] == 'deleted') : ?>
+        <div class="alert alert-success">Product deleted successfully!</div>
+      <?php elseif ($_GET['status'] == 'error') : ?>
+        <div class="alert alert-danger">Failed to delete product. Please try again.</div>
+      <?php endif; ?>
+    <?php endif; ?>
+
+    <!-- search -->
     <form method="GET" action="manage_products.php" class="mb-4">
       <div class="form-group">
         <input type="text" id="search" name="search" class="form-control" placeholder="Search Product Name or Brand" value="<?php echo htmlspecialchars($search); ?>">
@@ -63,7 +64,7 @@ $products = getProducts($filters, '', $search);
       <a href="manage_products.php" class="btn btn-secondary">Reset</a>
     </form>
 
-    <!-- Products table -->
+    <!-- products table -->
     <div class="table-responsive">
       <table class="table table-striped table-bordered">
         <thead>
@@ -79,9 +80,9 @@ $products = getProducts($filters, '', $search);
           <?php foreach ($products as $product) : ?>
             <tr>
               <th scope="row"><?php echo htmlspecialchars($product['product_id']); ?></th>
-              <td><a href="product.php?id=<?php echo $product['product_id']; ?>"><?php echo htmlspecialchars($product['product_name']); ?></a></td>
+              <td><a href="product.php?id=<?php echo htmlspecialchars($product['product_id']); ?>"><?php echo htmlspecialchars($product['product_name']); ?></a></td>
               <td><?php echo htmlspecialchars($product['manufacturer']); ?></td>
-              <td><a href="edit_product.php?id=<?php echo $product['product_id']; ?>" class="btn btn-warning">Edit</a></td>
+              <td><a href="edit_product.php?id=<?php echo htmlspecialchars($product['product_id']); ?>" class="btn btn-warning">Edit</a></td>
             </tr>
           <?php endforeach; ?>
         </tbody>

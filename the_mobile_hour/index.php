@@ -27,16 +27,13 @@ $productChunks = array_chunk($products, 4);
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
 
-  <!-- custom css -->
+  <!-- custom css - carousel clarity-->
   <link rel="stylesheet" href="css/stylesheet.css">
 
 
 </head>
 
-
-
 <body>
-
 
   <header>
     <!-- home nav -->
@@ -65,18 +62,6 @@ $productChunks = array_chunk($products, 4);
 
         <!-- navbar left margin items -->
         <ul class="navbar-nav ml-auto">
-
-          <!-- search bar -->
-          <form class="d-flex" role="search">
-            <input class="form-control" type="search" placeholder="Search" aria-label="Search" style="font-size: 15px">
-            <button class="btn btn-outline-white" type="submit">
-              <!-- search svg - magn glass-->
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search mb-2" viewBox="0 0 16 16">
-                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-              </svg>
-            </button>
-          </form>
-
 
           <!-- myacc -->
           <li class="nav-item ml-2">
@@ -313,10 +298,6 @@ $productChunks = array_chunk($products, 4);
         </div>
       <?php endforeach; ?>
     </div>
-
-
-
-
   </main>
 
   <footer>
@@ -417,9 +398,9 @@ $productChunks = array_chunk($products, 4);
 
 
   <!-- bootstrap js -->
-  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
 
 </body>
 

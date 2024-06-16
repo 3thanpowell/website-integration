@@ -788,9 +788,14 @@ function uploadProductImage($product_id, $image_file)
       'product_id' => $product_id
     ]);
 
-    // Delete the old image
-    if ($current_image && file_exists("../" . $current_image)) {
-      unlink("../" . $current_image);
+    // Delete the old image securely
+    if ($current_image) {
+      $current_image_path = realpath("../" . $current_image);
+      $uploads_dir = realpath("../uploads/");
+
+      if ($current_image_path && strpos($current_image_path, $uploads_dir) === 0) {
+        unlink($current_image_path);
+      }
     }
 
     return $new_image_url;
@@ -798,6 +803,7 @@ function uploadProductImage($product_id, $image_file)
     return false;
   }
 }
+
 
 
 
@@ -826,9 +832,14 @@ function deleteProduct($product_id)
     $stmt->execute(['product_id' => $product_id]);
     $feature_id = $stmt->fetchColumn();
 
-    // Delete the associated image from the file system
-    if ($image_url && file_exists("../" . $image_url)) {
-      unlink("../" . $image_url);
+    // Delete the associated image from the file system securely
+    if ($image_url) {
+      $image_path = realpath("../" . $image_url);
+      $uploads_dir = realpath("../uploads/");
+
+      if ($image_path && strpos($image_path, $uploads_dir) === 0 && file_exists($image_path)) {
+        unlink($image_path);
+      }
     }
 
     // Delete the associated image from the database

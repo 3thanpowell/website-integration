@@ -1,5 +1,7 @@
 <?php
 session_start();
+
+// kicks user if not logged in
 if (!isset($_SESSION['user_id'])) {
   header('Location: login.php');
   exit();
@@ -23,17 +25,18 @@ if (!isset($_SESSION['user_id'])) {
 
 <body>
 
-  <!-- navbar -->
-  <?php include 'navbar.php'; ?>
+  <header>
+    <!-- navbar -->
+    <?php include 'navbar.php'; ?>
 
+    <div class="container mt-5">
+      <h1 class="display-4">Your order has been placed!</h1>
+      <small>Thank you for shopping with us.</small>
+    </div>
+  </header>
 
 
   <main class="container">
-
-    <h1 class="display-4">Your order has been placed!</h1>
-    <small>Thank you for shopping with us.</small>
-    <hr>
-
 
     <div class="row">
 
@@ -55,26 +58,10 @@ if (!isset($_SESSION['user_id'])) {
 
         </a>
       </div>
-
-
-
-
     </div>
-
-
-
-
-
-
-
   </main>
 
-
-
-
-
-
-  <!-- footer -->
+  <!-- footer - stick to bottom-->
   <div class="fixed-bottom">
     <?php include 'footer.php'; ?>
   </div>

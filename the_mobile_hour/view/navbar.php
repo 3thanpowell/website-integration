@@ -1,15 +1,16 @@
 <?php
 
+// checks if a session is already in progress. if yes, dont start.
 if (session_status() === PHP_SESSION_NONE) {
   session_start();
 }
 
+// var for myacc link change
 $isLoggedIn = isset($_SESSION['user_id']);
 $userRole = $isLoggedIn ? $_SESSION['user_role'] : '';
 
 ?>
 <!-- navbar  -->
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
 
   <!-- logo -->
@@ -36,20 +37,8 @@ $userRole = $isLoggedIn ? $_SESSION['user_role'] : '';
     <!-- navbar left margin items -->
     <ul class="navbar-nav ml-auto">
 
-      <!-- search bar -->
-      <form class="d-flex" role="search">
-        <input class="form-control" type="search" placeholder="Search" aria-label="Search" style="font-size: 15px">
-        <button class="btn btn-outline-white" type="submit">
-          <!-- search svg - magn glass-->
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search mb-2" viewBox="0 0 16 16">
-            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-          </svg>
-        </button>
-      </form>
-
-
       <!-- myacc -->
-      <li class="nav-item ml-2">
+      <li class="nav-item">
 
         <!-- checks if user is logged in -->
         <?php if ($isLoggedIn) : ?>

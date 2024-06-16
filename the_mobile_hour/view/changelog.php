@@ -49,12 +49,14 @@ $changelogEntries = getChangelogEntries($filters);
 
     <div class="container mt-5">
       <h1 class="display-4 mb-4">Changelog</h1>
+    </div>
   </header>
 
 
   <main>
     <!-- search form -->
-    <form method="GET" action="changelog.php" class="mb-4">
+    <div class="container mt-5>
+      <form method=" GET" action="changelog.php" class="mb-4">
       <div class="form-row">
         <div class="form-group col-md-2">
           <input type="number" id="product_id" name="product_id" class="form-control" placeholder="Product ID" value="<?php echo isset($filters['product_id']) ? htmlspecialchars($filters['product_id']) : ''; ?>">
@@ -100,38 +102,38 @@ $changelogEntries = getChangelogEntries($filters);
 
         </div>
       </div>
-    </form>
+      </form>
 
-    <!-- changelog table -->
-    <div class="table-responsive">
-      <table class="table table-striped table-bordered">
-        <thead>
-          <tr>
-            <th scope="col">Changelog ID</th>
-            <th scope="col">Date Created</th>
-            <th scope="col">Date Last Modified</th>
-            <th scope="col">Product ID</th>
-            <th scope="col">Product Name</th>
-            <th scope="col">User ID</th>
-            <th scope="col">User Email</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <?php foreach ($changelogEntries as $entry) : ?>
+      <!-- changelog table -->
+      <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+          <thead>
             <tr>
-              <th scope="row"><?php echo htmlspecialchars($entry['changelog_id']); ?></th>
-              <td><?php echo htmlspecialchars($entry['date_created']); ?></td>
-              <td><?php echo htmlspecialchars($entry['date_last_modified']); ?></td>
-              <td><?php echo htmlspecialchars($entry['product_id']); ?></td>
-              <td><?php echo htmlspecialchars($entry['product_name']); ?></td>
-              <td><?php echo htmlspecialchars($entry['user_id']); ?></td>
-              <td><?php echo htmlspecialchars($entry['user_email']); ?></td>
+              <th scope="col">Changelog ID</th>
+              <th scope="col">Date Created</th>
+              <th scope="col">Date Last Modified</th>
+              <th scope="col">Product ID</th>
+              <th scope="col">Product Name</th>
+              <th scope="col">User ID</th>
+              <th scope="col">User Email</th>
             </tr>
-          <?php endforeach; ?>
-        </tbody>
-      </table>
-    </div>
+          </thead>
+
+          <tbody>
+            <?php foreach ($changelogEntries as $entry) : ?>
+              <tr>
+                <th scope="row"><?php echo htmlspecialchars($entry['changelog_id']); ?></th>
+                <td><?php echo htmlspecialchars($entry['date_created']); ?></td>
+                <td><?php echo htmlspecialchars($entry['date_last_modified']); ?></td>
+                <td><?php echo htmlspecialchars($entry['product_id']); ?></td>
+                <td><?php echo htmlspecialchars($entry['product_name']); ?></td>
+                <td><?php echo htmlspecialchars($entry['user_id']); ?></td>
+                <td><?php echo htmlspecialchars($entry['user_email']); ?></td>
+              </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+      </div>
     </div>
   </main>
 

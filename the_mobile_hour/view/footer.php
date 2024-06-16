@@ -1,3 +1,4 @@
+<!-- if logged in, set login link to logout -->
 <?php $isLoggedIn = isset($_SESSION['user_id']); ?>
 
 <footer>

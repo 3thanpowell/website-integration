@@ -12,6 +12,7 @@ document.getElementById("phone").addEventListener("input", function () {
   }
 });
 
+// pword validation
 document.getElementById("password").addEventListener("input", function () {
   const passwordField = document.getElementById("password");
   const password = passwordField.value;
@@ -25,3 +26,24 @@ document.getElementById("password").addEventListener("input", function () {
     passwordField.setCustomValidity("");
   }
 });
+
+// pword visibility toggle
+document
+  .getElementById("togglePassword")
+  .addEventListener("click", function (e) {
+    const passwordField = document.getElementById("password");
+    const type =
+      passwordField.getAttribute("type") === "password" ? "text" : "password";
+    passwordField.setAttribute("type", type);
+  });
+
+document
+  .getElementById("toggleConfirmPassword")
+  .addEventListener("click", function (e) {
+    const confirmPasswordField = document.getElementById("confirmPassword");
+    const type =
+      confirmPasswordField.getAttribute("type") === "password"
+        ? "text"
+        : "password";
+    confirmPasswordField.setAttribute("type", type);
+  });

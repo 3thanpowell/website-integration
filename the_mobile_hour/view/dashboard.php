@@ -13,7 +13,7 @@ require_once '../model/functions.php';
 $firstname = $_SESSION['firstname'];
 $customerId = $_SESSION['customer_id'];
 
-//gets logged in customer's recent orders 
+//gets logged in customer 3 recent orders  
 $recentOrders = getRecentOrders($customerId);
 ?>
 
@@ -31,8 +31,12 @@ $recentOrders = getRecentOrders($customerId);
 
 <body>
 
-  <!-- navbar -->
-  <?php include 'navbar.php'; ?>
+  <header>
+
+    <!-- navbar -->
+    <?php include 'navbar.php'; ?>
+
+  </header>
 
 
 

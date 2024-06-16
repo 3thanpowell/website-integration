@@ -24,13 +24,11 @@ $brands = getAllBrands();
     <!-- navbar -->
     <?php include 'navbar.php'; ?>
 
-    <!-- page title -->
-
-    <div class="container  p-3 ">
+    <div class="container mt-5">
       <div class="row">
 
         <div class="col-8">
-          <h1 class="display-5">Brands</h1>
+          <h1 class="display-4">Brands</h1>
         </div>
 
         <div class="col-9 mt-4">
@@ -41,7 +39,6 @@ $brands = getAllBrands();
         </div>
       </div>
     </div>
-
   </header>
 
   <main>
@@ -64,7 +61,7 @@ $brands = getAllBrands();
       </div>
     </div>
   </main>
-  
+
   <!-- footer -->
   <?php include 'footer.php'; ?>
 </body>

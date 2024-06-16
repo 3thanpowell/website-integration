@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Kicks user if not logged in or not an admin/manager
+// kicks user if not logged in or not an admin/manager
 if (!isset($_SESSION['user_id']) || ($_SESSION['user_role'] != 'admin' && $_SESSION['user_role'] != 'manager')) {
   header('Location: login.php');
   exit();
@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id']) || ($_SESSION['user_role'] != 'admin' && $_SESS
 
 require_once '../model/functions.php';
 
-// Initialize filters, sort, and search variables
+// filter and search var
 $filters = [];
 $sort = '';
 $search = '';
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   }
 }
 
-// Fetch users based on role
+// users based on role - if manager, get all. if admin, only customers
 if ($_SESSION['user_role'] == 'manager') {
   $users = getAllUsers($filters, $sort, $search);
 } elseif ($_SESSION['user_role'] == 'admin') {
@@ -54,9 +54,15 @@ if ($_SESSION['user_role'] == 'manager') {
     <?php include 'navbar.php'; ?>
 
     <div class="container mt-5">
-      <h1 class="display-4 mb-4">Manage Users</h1>
+      <h1 class="display-4">Manage Users</h1>
+    </div>
+  </header>
 
-      <!-- delete user message -->
+  <main>
+
+    <div class="container">
+
+      <!-- output display - on delete -->
       <?php if (isset($_GET['status'])) : ?>
         <?php if ($_GET['status'] == 'deleted') : ?>
           <div class="alert alert-success">User deleted successfully!</div>
@@ -65,91 +71,77 @@ if ($_SESSION['user_role'] == 'manager') {
         <?php endif; ?>
       <?php endif; ?>
 
-    </div>
+      <!-- filter and search Form -->
+      <form method="GET" action="manage_users.php" class="mb-4">
+        <div class="form-row">
 
-  </header>
+          <!-- select role - only for managers -->
+          <?php if ($_SESSION['user_role'] == 'manager') : ?>
+            <div class="form-group col-md-4">
+              <select id="role" name="role" class="form-control">
+                <option value="">Filter By Role</option>
+                <option value="admin" <?php echo (!empty($filters['role']) && $filters['role'] == 'admin') ? 'selected' : ''; ?>>Admin</option>
+                <option value="manager" <?php echo (!empty($filters['role']) && $filters['role'] == 'manager') ? 'selected' : ''; ?>>Manager</option>
+                <option value="customer" <?php echo (!empty($filters['role']) && $filters['role'] == 'customer') ? 'selected' : ''; ?>>Customer</option>
+              </select>
+            </div>
+          <?php endif; ?>
 
-  <div class="container">
-    <!-- filter and search Form -->
-    <form method="GET" action="manage_users.php" class="mb-4">
-      <div class="form-row">
-
-        <!-- select role only for managers -->
-        <?php if ($_SESSION['user_role'] == 'manager') : ?>
           <div class="form-group col-md-4">
-            <select id="role" name="role" class="form-control">
-              <option value="">Filter By Role</option>
-              <option value="admin" <?php echo (!empty($filters['role']) && $filters['role'] == 'admin') ? 'selected' : ''; ?>>Admin</option>
-              <option value="manager" <?php echo (!empty($filters['role']) && $filters['role'] == 'manager') ? 'selected' : ''; ?>>Manager</option>
-              <option value="customer" <?php echo (!empty($filters['role']) && $filters['role'] == 'customer') ? 'selected' : ''; ?>>Customer</option>
+            <input type="text" id="search" name="search" placeholder="Search Name or Email" class="form-control" value="<?php echo htmlspecialchars($search); ?>">
+          </div>
+
+          <div class="form-group col-md-4">
+            <select id="sort" name="sort" class="form-control">
+              <option value="">Sort By</option>
+              <option value="name_asc" <?php echo ($sort == 'name_asc') ? 'selected' : ''; ?>>Name Ascending</option>
+              <option value="name_desc" <?php echo ($sort == 'name_desc') ? 'selected' : ''; ?>>Name Descending</option>
             </select>
           </div>
-        <?php endif; ?>
 
-        <div class="form-group col-md-4">
-          <input type="text" id="search" name="search" placeholder="Search Name or Email" class="form-control" value="<?php echo htmlspecialchars($search); ?>">
         </div>
 
-        <div class="form-group col-md-4">
-          <select id="sort" name="sort" class="form-control">
-            <option value="">Sort By</option>
-            <option value="name_asc" <?php echo ($sort == 'name_asc') ? 'selected' : ''; ?>>Name Ascending</option>
-            <option value="name_desc" <?php echo ($sort == 'name_desc') ? 'selected' : ''; ?>>Name Descending</option>
-          </select>
-        </div>
+        <button type="submit" class="btn btn-primary">Filter</button>
 
-      </div>
+        <button type="button" class="btn btn-secondary" onclick="window.location.href='manage_users.php';">Reset</button>
 
-      <button type="submit" class="btn btn-primary">Filter</button>
+      </form>
+    </div>
 
-      <button type="button" class="btn btn-secondary" onclick="window.location.href='manage_users.php';">Reset</button>
+    <div class="container mt-5 table-responsive">
 
-    </form>
-  </div>
-
-  <div class="container mt-5 table-responsive">
-
-    <table class="table table-striped table-bordered">
-      <thead>
-        <tr>
-          <th scope="col">User ID</th>
-          <th scope="col">Role</th>
-          <th scope="col">Email</th>
-          <th scope="col">First Name</th>
-          <th scope="col">Last Name</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </thead>
-
-      <tbody>
-
-        <?php foreach ($users as $user) : ?>
-
+      <table class="table table-striped table-bordered">
+        <thead>
           <tr>
-
-            <th scope="row"><?php echo htmlspecialchars($user['user_id']); ?></th>
-
-            <td><?php echo htmlspecialchars($user['user_role']); ?></td>
-
-            <td><?php echo htmlspecialchars($user['user_email']); ?></td>
-
-            <td><?php echo ucfirst(htmlspecialchars($user['firstname'])); ?></td>
-
-            <td><?php echo htmlspecialchars($user['lastname']); ?></td>
-
-            <td class="text-center">
-
-              <a href="edit_user.php?id=<?php echo $user['user_id']; ?>" class="btn btn-warning ">Edit</a>
-
-            </td>
-
+            <th scope="col">User ID</th>
+            <th scope="col">Role</th>
+            <th scope="col">Email</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Actions</th>
           </tr>
+        </thead>
 
-        <?php endforeach; ?>
+        <tbody>
 
-      </tbody>
-    </table>
-  </div>
+          <?php foreach ($users as $user) : ?>
+
+            <tr>
+              <th scope="row"><?php echo htmlspecialchars($user['user_id']); ?></th>
+              <td><?php echo htmlspecialchars($user['user_role']); ?></td>
+              <td><?php echo htmlspecialchars($user['user_email']); ?></td>
+              <td><?php echo ucfirst(htmlspecialchars($user['firstname'])); ?></td>
+              <td><?php echo htmlspecialchars($user['lastname']); ?></td>
+              <td class="text-center"><a href="edit_user.php?id=<?php echo htmlspecialchars($user['user_id']); ?>" class="btn btn-warning ">Edit</a>
+              </td>
+            </tr>
+
+          <?php endforeach; ?>
+
+        </tbody>
+      </table>
+    </div>
+  </main>
 
   <!-- footer -->
   <?php include 'footer.php'; ?>

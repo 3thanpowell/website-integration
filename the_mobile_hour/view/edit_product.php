@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Kicks user if not logged in or not an admin/manager
+// kicks user if not logged in or not an admin/manager
 if (!isset($_SESSION['user_id']) || ($_SESSION['user_role'] != 'admin' && $_SESSION['user_role'] != 'manager')) {
   header('Location: login.php');
   exit();
@@ -9,17 +9,17 @@ if (!isset($_SESSION['user_id']) || ($_SESSION['user_role'] != 'admin' && $_SESS
 
 require_once '../model/functions.php';
 
-// Get product ID from the query string
+// get product ID 
 $product_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-// Fetch product details
+// product details
 $product = getProductById($product_id);
 if (!$product) {
   echo "Product not found.";
   exit();
 }
 
-// Handle form submission
+// form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $product_name = $_POST['product_name'];
   $product_model = $_POST['product_model'];
@@ -39,14 +39,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $front_camera = $_POST['front_camera'];
   $description = $_POST['description'];
 
-  // Handle image upload
+  // image upload
   if (!empty($_FILES['image']['name'])) {
     $image_url = uploadProductImage($product_id, $_FILES['image']);
   } else {
     $image_url = $product['image_url'];
   }
 
-  // Update product details
+  // product details
   $result = updateProduct($product_id, $product_name, $product_model, $manufacturer, $price, $stock_on_hand, $weight, $dimensions, $os, $screensize, $resolution, $cpu, $ram, $storage, $battery, $rear_camera, $front_camera, $description, $image_url);
 
   if ($result) {
@@ -71,16 +71,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <body>
 
-  <!-- Navbar -->
-  <?php include 'navbar.php' ?>
+  <header>
+    <!-- navbar -->
+    <?php include 'navbar.php' ?>
+
+    <div class="container mt-5">
+      <h1 class="display-4">Edit Product Details</h1>
+    </div>
+  </header>
 
   <main>
     <div class="container mt-4">
-      <h1 class="display-4 mb-4">Edit Product Details</h1>
+
       <div class="row">
         <div class="col-md-6">
           <img src="../<?php echo htmlspecialchars($product['image_url']); ?>" alt="<?php echo htmlspecialchars($product['product_name']); ?>" class="img-fluid border">
-          <form method="POST" action="edit_product.php?id=<?php echo $product_id; ?>" enctype="multipart/form-data" id="editProductForm">
+          <form method="POST" action="edit_product.php?id=<?php echo htmlspecialchars($product_id); ?>" enctype="multipart/form-data" id="editProductForm">
+
             <div class="form-group mt-3 border rounded p-3">
               <label for="image">Update Product Image</label>
               <input type="file" class="form-control-file" id="image" name="image">
@@ -267,6 +274,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#confirmUpdateModal">Update Product</button>
             <button type="reset" class="btn btn-secondary btn-lg">Reset</button>
 
+            <!-- critical actions accordion -->
             <div class="accordion mt-3" id="dangerOptions">
               <div class="card">
                 <div class="card-header alert-danger" id="headingOne">
@@ -328,7 +336,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-              <a href="../controller/delete_product.php?id=<?php echo $product_id; ?>" class="btn btn-danger">Yes, Delete</a>
+              <a href="../controller/delete_product.php?id=<?php echo htmlspecialchars($product_id); ?>" class="btn btn-danger">Yes, Delete</a>
             </div>
           </div>
         </div>
@@ -340,7 +348,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <!-- footer -->
   <?php include 'footer.php' ?>
 
-  <!-- bootstrap js -->
   <!-- bootstrap js -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
