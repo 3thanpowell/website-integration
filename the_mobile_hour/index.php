@@ -389,7 +389,7 @@ $productChunks = array_chunk($products, 4);
       <div class="row">
         <div class="col-12">
           <p class="text-center pt-3">
-            &copy; Ethan Powell 474086542
+            &copy;
           </p>
         </div>
       </div>
