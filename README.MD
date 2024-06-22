@@ -108,24 +108,24 @@ For further information on setting up and using XAMPP, refer to the [XAMPP FAQ](
 
 ## Website Screenshots
 
-###Landing Page
+### Landing Page
 ![Landing Page](https://github.com/3thanpowell/website-integration/blob/main/documentation/screenshots/landing.png?raw=true)
 
-###Products Page
+### Products Page
 ![Products Page](https://github.com/3thanpowell/website-integration/blob/main/documentation/screenshots/products.png?raw=true)
 
-###Product Page
+### Product Page
 ![Product Page](https://github.com/3thanpowell/website-integration/blob/main/documentation/screenshots/product.png?raw=true)
 
-###Login
+### Login
 ![Login](https://github.com/3thanpowell/website-integration/blob/main/documentation/screenshots/login.png?raw=true)
 
-###Customer Dashboard
+### Customer Dashboard
 ![Customer Dashboard](https://github.com/3thanpowell/website-integration/blob/main/documentation/screenshots/customer_dash.png?raw=true)
 
-###Staff Dashboard
+### Staff Dashboard
 ![Staff Dashboard](https://github.com/3thanpowell/website-integration/blob/main/documentation/screenshots/staff_dash.png?raw=true)
 
-###Modify Product
+### Modify Product
 ![Modify Product](https://github.com/3thanpowell/website-integration/blob/main/documentation/screenshots/modify_product.png?raw=true)
 
