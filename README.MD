@@ -1,6 +1,6 @@
 ## Contents
 - [Website Integration](#websiteintegration)
-- [Scenario](#additional-information)
+- [Scenario](#scenario)
 - [Tools Used](#tools-used)
 - [Prototype](#prototype)
 - [Set-up Instructions](#set-up-instructions)
