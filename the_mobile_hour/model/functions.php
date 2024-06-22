@@ -474,9 +474,11 @@ function deleteUser($user_id)
     return true;
   } catch (PDOException $e) {
     $pdo->rollBack();
+    error_log("Error deleting user with ID $user_id: " . $e->getMessage());
     return false;
   }
 }
+
 
 
 // STAFF - ORDER MANAGEMENT
@@ -633,12 +635,12 @@ function getChangelogEntries($filters = [])
   }
 
   if (!empty($filters['start_date'])) {
-    $whereClauses[] = 'c.date_last_modified >= :start_date';
+    $whereClauses[] = 'c.date_created >= :start_date';
     $params['start_date'] = date('Y-m-d 00:00:00', strtotime($filters['start_date']));
   }
 
   if (!empty($filters['end_date'])) {
-    $whereClauses[] = 'c.date_last_modified <= :end_date';
+    $whereClauses[] = 'c.date_created <= :end_date';
     $params['end_date'] = date('Y-m-d 23:59:59', strtotime($filters['end_date']));
   }
 
