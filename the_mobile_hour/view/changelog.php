@@ -35,6 +35,8 @@ $changelogEntries = getChangelogEntries($filters);
 
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Changelog</title>
 
   <!-- bootstrap cdn link -->
@@ -55,53 +57,53 @@ $changelogEntries = getChangelogEntries($filters);
 
   <main>
     <!-- search form -->
-    <div class="container mt-5>
-      <form method=" GET" action="changelog.php" class="mb-4">
-      <div class="form-row">
-        <div class="form-group col-md-2">
-          <input type="number" id="product_id" name="product_id" class="form-control" placeholder="Product ID" value="<?php echo isset($filters['product_id']) ? htmlspecialchars($filters['product_id']) : ''; ?>">
-        </div>
-
-        <div class="form-group col-md-2">
-          <input type="number" id="user_id" name="user_id" class="form-control" placeholder="User ID" value="<?php echo isset($filters['user_id']) ? htmlspecialchars($filters['user_id']) : ''; ?>">
-        </div>
-
-        <div class="col-md-2">
-          <button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#dateRange" aria-expanded="false" aria-controls="dateRange">
-            Filter Date
-          </button>
-        </div>
-
-        <div class="form-group col-md-2">
-          <button type="submit" class="btn btn-primary">Search</button>
-          <a href="changelog.php" class="btn btn-secondary">Reset</a>
-        </div>
-      </div>
-
-
-      <!-- collapse for date range -->
-      <div class="collapse" id="dateRange">
-        <div class="card card-body">
-          <div class="row">
-            <div class="form-group col-md-6">
-              <label for="start_date">Start Date:</label>
-              <input type="date" id="start_date" name="start_date" class="form-control" placeholder="Start Date" value="<?php echo isset($filters['start_date']) ? htmlspecialchars($filters['start_date']) : ''; ?>">
-            </div>
-
-            <div class="form-group col-md-6">
-              <label for="end_date">End Date:</label>
-              <input type="date" id="end_date" name="end_date" class="form-control" placeholder="End Date" value="<?php echo isset($filters['end_date']) ? htmlspecialchars($filters['end_date']) : ''; ?>">
-            </div>
-
-            <div class="form-group col-md-12">
-              <button type="submit" class="btn btn-primary">Search</button>
-              <a href="changelog.php" class="btn btn-secondary">Reset</a>
-            </div>
+    <div class="container" mt-5>
+      <form method="GET" action="changelog.php" class="mb-4">
+        <div class="form-row">
+          <div class="form-group col-md-2">
+            <input type="number" id="product_id" name="product_id" class="form-control" placeholder="Product ID" value="<?php echo isset($filters['product_id']) ? htmlspecialchars($filters['product_id']) : ''; ?>">
           </div>
 
+          <div class="form-group col-md-2">
+            <input type="number" id="user_id" name="user_id" class="form-control" placeholder="User ID" value="<?php echo isset($filters['user_id']) ? htmlspecialchars($filters['user_id']) : ''; ?>">
+          </div>
 
+          <div class="col-md-2">
+            <button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#dateRange" aria-expanded="false" aria-controls="dateRange">
+              Filter Date
+            </button>
+          </div>
+
+          <div class="form-group col-md-2">
+            <button type="submit" class="btn btn-primary">Search</button>
+            <a href="changelog.php" class="btn btn-secondary">Reset</a>
+          </div>
         </div>
-      </div>
+
+
+        <!-- collapse for date range -->
+        <div class="collapse" id="dateRange">
+          <div class="card card-body">
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label for="start_date">Start Date:</label>
+                <input type="date" id="start_date" name="start_date" class="form-control" placeholder="Start Date" value="<?php echo isset($filters['start_date']) ? htmlspecialchars($filters['start_date']) : ''; ?>">
+              </div>
+
+              <div class="form-group col-md-6">
+                <label for="end_date">End Date:</label>
+                <input type="date" id="end_date" name="end_date" class="form-control" placeholder="End Date" value="<?php echo isset($filters['end_date']) ? htmlspecialchars($filters['end_date']) : ''; ?>">
+              </div>
+
+              <div class="form-group col-md-12">
+                <button type="submit" class="btn btn-primary">Search</button>
+                <a href="changelog.php" class="btn btn-secondary">Reset</a>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
       </form>
 
       <!-- changelog table -->
