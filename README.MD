@@ -5,6 +5,8 @@ Mainly covering the integration of a database and how CRUD operations and user a
 
 ## Website Screenshots
 
+![Landing Page](https://github.com/3thanpowell/website-integration/blob/main/documentation/screenshots/landing.png?raw=true)
+
 ## Scenario
 
 > You are employed by Uptown IT’s Creative Department as a Web Developer. Your manager has given you a new project to design and develop. The client is The Mobile Hour. The company specialises in selling top brand mobile phones online. The Mobile Hour had a website developed by a friend a few years back but it needs to be replaced. The design is not appealing to today’s customers; it also lacks functionality and security. Your task is to design and develop a completely new website. Security and an attractive design are high on the client’s list of expectations.
