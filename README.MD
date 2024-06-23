@@ -94,9 +94,9 @@ Website Prototype can be accessed [here](https://www.figma.com/proto/x9EwlLbqn5I
 
         // database credentials
         $host = 'localhost';
-        $db = 'the-mobile-hour';
-        $db_user = 'admin';
-        $db_password = 'themobilehour';
+        $db = 'the-mobile-hour'; //name of the database you created
+        $db_user = 'root';
+        $db_password = ''; //default db password is empty
         $charset = 'utf8mb4';
      
      ```
