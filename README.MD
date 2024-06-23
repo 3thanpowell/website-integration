@@ -90,11 +90,14 @@ Website Prototype can be accessed [here](https://www.figma.com/proto/x9EwlLbqn5I
    - Locate the configuration file where database connection settings are defined (`model/db.php`).
    - Update the database connection settings to match your local environment. For example:
      ```php
-     <?php
-     $host = 'localhost';
-     $db = 'the_mobile_hour_db'; // The name of the database you created
-     $user = 'root';
-     $pass = ''; // Default MySQL root password is empty
+        <?php
+
+        // database credentials
+        $host = 'localhost';
+        $db = 'the-mobile-hour';
+        $db_user = 'admin';
+        $db_password = 'themobilehour';
+        $charset = 'utf8mb4';
      
      ```
 5. **Access the Project:**
